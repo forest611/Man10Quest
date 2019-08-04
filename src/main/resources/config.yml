@@ -1,0 +1,9 @@
+mysql:
+  host: localhost
+  user: root
+  pass: pass
+  port: 3306
+  db: man10quest
+damage1: 46
+damage2: 46
+daily: 0

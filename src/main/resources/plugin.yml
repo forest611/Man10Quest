@@ -1,0 +1,8 @@
+name: Man10Quest
+version: @version@
+main: red.man10.man10quest.Man10Quest
+commands:
+  mq:
+    description: man10quest
+    usage: /<command>
+    default: op
