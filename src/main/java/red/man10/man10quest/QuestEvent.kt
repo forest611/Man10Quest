@@ -70,7 +70,7 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
             }
 
             if (e.slot in 48..50){
-                plugin.questInventory.openQuest(p)
+                plugin.questInventory.openQuestType(1,p)
                 return
             }
 

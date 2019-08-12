@@ -164,7 +164,7 @@ class QuestInventory(private val plugin:Man10Quest) {
         val retire = ItemStack(Material.WOOD_DOOR)
         val meta2 = retire.itemMeta
         meta2.displayName ="§6§lクエストを中断する"
-        meta2.lore = mutableListOf("§4§lクエストを中断した場合","§4§lもう一度はじめからクエストを始める必要があります")
+        meta2.lore = mutableListOf("§4§lクエストを中断した場合","§4§lもう一度はじめから","クエストを始める必要があります")
         retire.itemMeta = meta2
 
         inv.setItem(11,ex)
