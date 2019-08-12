@@ -28,7 +28,7 @@ class Man10Quest : JavaPlugin() {
         questData.dailyProcess()
 
         getCommand("mq").executor = QuestCommand(this)
-        server.pluginManager.registerEvents(questInventory,this)
+        server.pluginManager.registerEvents(QuestEvent(this),this)
         questData.loadQuest()
 
     }

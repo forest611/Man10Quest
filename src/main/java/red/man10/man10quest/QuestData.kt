@@ -59,8 +59,8 @@ class QuestData(private val plugin :Man10Quest) {
             d.hide = yml.getBoolean("hide",false)
             d.finishMessage = yml.getString("finishMsg","none")
             d.replicaTitle = yml.getString("replicaTitle","§e証のレプリカ")
-            d.msg = yml.getString("msg","none")
-            d.cmd = yml.getString("cmd","none")
+            d.msg = yml.getStringList("msg" )
+            d.cmd = yml.getStringList("cmd")
             d.once = yml.getBoolean("once",true)
             d.unlock = yml.getStringList("unlock")
             d.daily = yml.getBoolean("daily",false)
@@ -137,8 +137,8 @@ class Data{
     var finishMessage = ""
     var start = true
     var replicaTitle = ""
-    var msg = ""
-    var cmd = ""
+    var msg = mutableListOf<String>()
+    var cmd = mutableListOf<String>()
     var once = true
     var unlock = mutableListOf<String>()
     var daily = false
