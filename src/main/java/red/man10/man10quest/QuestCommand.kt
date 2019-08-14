@@ -30,20 +30,6 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
 
         if (!sender.hasPermission("quest.staff")){ return true}
 
-        // /mq check player quest
-        if (args[0] == "check"){
-
-            Bukkit.getScheduler().runTask(plugin) {
-
-                if (plugin.playerData.isFinish(Bukkit.getPlayer(args[1]),args[2])){
-                    Bukkit.getLogger().info("finish")
-                    return@runTask
-                }
-                Bukkit.getLogger().info("not finish")
-
-            }
-            return true
-        }
 
         //  /mq finish player quest
         if (args[0] == "finish"){
@@ -66,12 +52,6 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
 
         }
 
-        if (args[0] == "remove"){
-            Thread(Runnable {
-                plugin.playerData.remove(Bukkit.getPlayer(args[1]),args[2])
-            }).start()
-            return true
-        }
 
         if (sender !is Player){
             return true
@@ -80,7 +60,7 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
         if (args[0] == "help"){
             sender.sendMessage("§e§lMan10Quest")
             sender.sendMessage("§d§l=================================")
-            sender.sendMessage("§b§l/mq check [player] [quest] 指定プレイヤーのクエストが終了してるかチェックします")
+            sender.sendMessage("§b§l/mq check [player] 指定プレイヤーのクエストが終了してるかチェックします")
             sender.sendMessage("§b§l/mq finish [player] [quest] クエストを終了させます(script blockに埋め込む場合はconsoleコマンドとして埋めてください)")
             sender.sendMessage("§b§l/mq remove [player] [quest] クエストクリアを取り消します")
             sender.sendMessage("§b§l/mq on [quest] 指定クエストをonにします onのみでプラグインをonにします")
@@ -90,6 +70,31 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
             sender.sendMessage("§b§l/mq reload クエストを再読込します")
             sender.sendMessage("§b§l/mq list 読み込まれているクエストを確認します")
             sender.sendMessage("§d§l=================================")
+        }
+
+        // /mq check player
+        if (args[0] == "check"){
+
+            Bukkit.getScheduler().runTask(plugin) {
+
+                val data = plugin.playerData.getFinishQuest(Bukkit.getPlayer(args[1]))
+
+                for (d in data){
+                    sender.sendMessage(d.title)
+                }
+
+
+            }
+            return true
+        }
+
+        if (args[0] == "remove"){
+            Thread(Runnable {
+                plugin.playerData.remove(Bukkit.getPlayer(args[1]),args[2])
+            }).start()
+            sender.sendMessage("§e§l削除完了！")
+
+            return true
         }
 
 
@@ -136,7 +141,6 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
                 sender.sendMessage("§e§l${d.name}:§r§f${d.title}")
             }
         }
-
 
         return true
     }

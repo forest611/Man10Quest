@@ -4,13 +4,6 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
-import org.bukkit.event.EventHandler
-import org.bukkit.event.Listener
-import org.bukkit.event.block.Action
-import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.player.AsyncPlayerChatEvent
-import org.bukkit.event.player.PlayerCommandPreprocessEvent
-import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 
@@ -109,7 +102,7 @@ class QuestInventory(private val plugin:Man10Quest) {
 
         Bukkit.getScheduler().runTask(plugin) {
 
-            val quest = plugin.playerData.getNotFinishQuest(player)
+            val quest = plugin.playerData.getFinishQuest(player)
 
 
             for (q in quest){
@@ -164,7 +157,7 @@ class QuestInventory(private val plugin:Man10Quest) {
         val retire = ItemStack(Material.WOOD_DOOR)
         val meta2 = retire.itemMeta
         meta2.displayName ="§6§lクエストを中断する"
-        meta2.lore = mutableListOf("§4§lクエストを中断した場合","§4§lもう一度はじめから","クエストを始める必要があります")
+        meta2.lore = mutableListOf("§4§lクエストを中断した場合","§4§lもう一度はじめから","§4§lクエストを始める必要があります")
         retire.itemMeta = meta2
 
         inv.setItem(11,ex)

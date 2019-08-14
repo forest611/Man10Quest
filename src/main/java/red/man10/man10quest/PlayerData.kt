@@ -8,8 +8,8 @@ class PlayerData(private val plugin:Man10Quest) {
     val playerQuest = HashMap<Player,Data?>()
 
 
-    fun getNotFinishQuest(p:Player) : MutableList<Data>{
-        val list = plugin.questData.quest
+    fun getFinishQuest(p:Player) : MutableList<Data>{
+        val list = mutableListOf<Data>()
 
         val mysql = MySQLManagerV2(plugin,"quest")
 
@@ -19,9 +19,7 @@ class PlayerData(private val plugin:Man10Quest) {
 
         while (rs.next()){
 
-            val data = plugin.questData.name[rs.getString("quest")]!!
-
-            list.remove(data)
+            list.add(plugin.questData.name[rs.getString("quest")]!!)
         }
         rs.close()
         qu.close()
