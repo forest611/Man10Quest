@@ -102,12 +102,13 @@ class QuestInventory(private val plugin:Man10Quest) {
 
         Bukkit.getScheduler().runTask(plugin) {
 
-            val quest = plugin.playerData.getFinishQuest(player)
+            val quest =plugin.questData.quest - plugin.playerData.getFinishQuest(player)
 
 
             for (q in quest){
-                if (q.type != type)continue
-                if (!plugin.playerData.isUnlock(player,q))continue
+                if (q.type != type){ continue }
+                if (!plugin.playerData.isUnlock(player,q)){ continue }
+
                 inv.addItem(makeItem(q))
             }
 

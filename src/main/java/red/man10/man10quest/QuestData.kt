@@ -81,8 +81,12 @@ class QuestData(private val plugin :Man10Quest) {
 
             if (d.type == "none"){
                 when(d.hide){
-                    false->type.add(d)
-                    true->hideType.add(d)
+                    false->{
+                        type.add(d)
+                    }
+                    true->{
+                        hideType.add(d)
+                    }
                 }
             }else{ quest.add(d) }
 
