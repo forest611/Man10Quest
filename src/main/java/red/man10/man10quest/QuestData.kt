@@ -1,5 +1,6 @@
 package red.man10.man10quest
 
+import org.apache.commons.lang.mutable.Mutable
 import org.bukkit.Bukkit
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
@@ -17,8 +18,8 @@ import java.util.TimerTask
 class QuestData(private val plugin :Man10Quest) {
 
     val quest = mutableListOf<Data>()
-    val type = mutableListOf<Data>()
-    val hideType = mutableListOf<Data>()
+    var type = mutableListOf<Data>()
+    var hideType = mutableListOf<Data>()
     val name = HashMap<String,Data>()
 
     fun getName(stack:ItemStack):String{
@@ -32,6 +33,11 @@ class QuestData(private val plugin :Man10Quest) {
         hideType.clear()
         name.clear()
 
+        Bukkit.getLogger().info("loading files....")
+
+        val Quest = mutableListOf<Data>()
+        val QuestHide = mutableListOf<Data>()
+
         val folder = File(Bukkit.getServer().pluginManager.getPlugin("Man10Quest").dataFolder,File.separator)
 
         if (!folder.exists()){
@@ -44,6 +50,8 @@ class QuestData(private val plugin :Man10Quest) {
             if (!f.isFile || f.name.indexOf("config") >=0 || f.name.lastIndexOf(".yml") <0){
                 continue
             }
+
+            Bukkit.getLogger().info("loading...${f.name}")
 
             val yml = YamlConfiguration.loadConfiguration(f)
 
@@ -64,6 +72,7 @@ class QuestData(private val plugin :Man10Quest) {
             d.once = yml.getBoolean("once",true)
             d.unlock = yml.getStringList("unlock")
             d.daily = yml.getBoolean("daily",false)
+            d.number = yml.getInt("number",-1)
 
             val l = yml.getStringList("lore")
             val na = d.name.toCharArray()
@@ -80,13 +89,11 @@ class QuestData(private val plugin :Man10Quest) {
 
 
             if (d.type == "none"){
-                when(d.hide){
-                    false->{
-                        type.add(d)
-                    }
-                    true->{
-                        hideType.add(d)
-                    }
+
+                if (!d.hide){
+                    Quest.add(d)
+                }else{
+                    QuestHide.add(d)
                 }
             }else{ quest.add(d) }
 
@@ -94,6 +101,26 @@ class QuestData(private val plugin :Man10Quest) {
 
         }
 
+        type = sortingTypes(Quest)
+
+
+    }
+
+
+    fun sortingTypes(data:MutableList<Data>):MutableList<Data>{
+        val sortedList = HashMap<Int,Data>()
+
+        val list = mutableListOf<Data>()
+
+        for (d in data){
+            if (d.number == -1){
+                list.add(d)
+                continue
+            }
+            sortedList[d.number] = d
+        }
+
+        return (sortedList.values + list).toMutableList()
     }
 
     fun dailyProcess(){
@@ -146,4 +173,5 @@ class Data{
     var once = true
     var unlock = mutableListOf<String>()
     var daily = false
+    var number = 0
 }
