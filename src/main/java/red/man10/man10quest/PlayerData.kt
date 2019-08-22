@@ -18,8 +18,7 @@ class PlayerData(private val plugin:Man10Quest) {
         val rs = qu.rs
 
         while (rs.next()){
-
-            list.add(plugin.questData.name[rs.getString("quest")]!!)
+            list.add(plugin.questData.get(rs.getString("quest")))
         }
         rs.close()
         qu.close()

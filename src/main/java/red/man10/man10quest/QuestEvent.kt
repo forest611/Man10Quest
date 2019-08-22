@@ -1,5 +1,6 @@
 package red.man10.man10quest
 
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -122,11 +123,22 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
 
         val data = plugin.playerData.playerQuest[p]!!
 
-        if (data.cmd.isEmpty() || data.cmd.indexOf(e.message) <0){ return}
-        e.isCancelled = true
+        if (data.cmd.isEmpty()){ return}
+        for (c in data.cmd){
+            e.message.indexOf(c)
+            if (e.message.indexOf(c) == 0){
+                e.isCancelled = true
+
+                p.sendMessage("コマンドは5秒後に実行されます...")
+                Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, {
+                    Bukkit.dispatchCommand(p,e.message)
+                },100)
 
 
-        plugin.questInventory.finish(p,data)
+                plugin.questInventory.finish(p,data)
+                return
+            }
+        }
 
     }
 

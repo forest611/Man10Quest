@@ -153,6 +153,9 @@ class QuestData(private val plugin :Man10Quest) {
 
     }
 
+    fun get(quest:String):Data{
+        return name[quest]?:return Data()
+    }
 
 }
 class Data{

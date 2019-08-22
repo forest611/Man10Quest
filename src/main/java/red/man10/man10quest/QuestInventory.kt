@@ -104,7 +104,6 @@ class QuestInventory(private val plugin:Man10Quest) {
 
             val quest =plugin.questData.quest - plugin.playerData.getFinishQuest(player)
 
-
             for (q in quest){
                 if (q.type != type){ continue }
                 if (!plugin.playerData.isUnlock(player,q)){ continue }
