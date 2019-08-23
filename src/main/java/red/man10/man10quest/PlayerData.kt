@@ -43,14 +43,10 @@ class PlayerData(private val plugin:Man10Quest) {
 
         if (quest.unlock.isEmpty())return true
 
-        val mysql = MySQLManagerV2(plugin,"quest")
+        val data = getFinishQuest(p)
 
-        val q = mysql.query("SELECT * FROM finish_player WHERE uuid='${p.uniqueId}';")
-
-        val rs = q.rs
-
-        while (rs.next()){
-            if (quest.unlock.indexOf(rs.getString("quest")) != -1){
+        for (d in quest.unlock){
+            if (data.indexOf(plugin.questData.get(d)) < 0){
                 return false
             }
         }
