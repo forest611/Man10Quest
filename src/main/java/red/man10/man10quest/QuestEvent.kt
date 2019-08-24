@@ -1,6 +1,8 @@
 package red.man10.man10quest
 
 import org.bukkit.Bukkit
+import org.bukkit.Material
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -9,6 +11,8 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.AsyncPlayerChatEvent
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.inventory.ItemFlag
+import org.bukkit.inventory.ItemStack
 
 class QuestEvent(private val plugin:Man10Quest) : Listener{
 
@@ -110,9 +114,7 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
         val data = plugin.playerData.playerQuest[p]!!
 
         if (data.msg.isEmpty() || data.msg.indexOf(e.message) <0){return}
-
-        plugin.questInventory.finish(p,data)
-
+        finish(p,data)
     }
 
     @EventHandler
@@ -135,7 +137,7 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
                 },100)
 
 
-                plugin.questInventory.finish(p,data)
+                finish(p,data)
                 return
             }
         }
@@ -167,12 +169,61 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
 
                 if (plugin.playerData.isFinish(p,name))return
 
-                plugin.questInventory.finish(p,plugin.playerData.playerQuest[p]!!)
+                finish(p,plugin.playerData.playerQuest[p]!!)
 
             }
         }
 
     }
+    fun finish(p:Player,data: Data){
+        p.inventory.addItem(questCard(data.name))
+        if (data.once){
+            Thread(Runnable {
+                plugin.playerData.finish(p,data.name)
+            }).start()
+        }
+        plugin.playerData.playerQuest.remove(p)
+        p.sendMessage(data.finishMessage)
+        for (c in data.dispatchCmd){
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),c)
+        }
 
+    }
+
+    fun questCard(name: String): ItemStack {
+        val data = plugin.questData.name[name]!!
+        if (data.hide){
+            val item = ItemStack(Material.DIAMOND_HOE,1,plugin.damage2.toShort())
+            val meta = item.itemMeta
+            meta.displayName = "§kXX§r§7§l裏クエスト"+data.title+"§8§l達成の証§kXX§r"
+            meta.lore = mutableListOf("§7裏クエスト達成おめでとうございます","§8ぜひ豪華な景品と交換してください！")
+            meta.isUnbreakable = true
+            meta.addEnchant(Enchantment.LOOT_BONUS_BLOCKS,1,true)
+            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
+            meta.addItemFlags(ItemFlag.HIDE_DESTROYS)
+            meta.addItemFlags(ItemFlag.HIDE_PLACED_ON)
+            meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS)
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+            item.itemMeta = meta
+
+            return item
+
+        }
+        val item = ItemStack(Material.DIAMOND_HOE,1,plugin.damage1.toShort())
+        val meta = item.itemMeta
+        meta.displayName = data.title+"§e§l達成の証"
+        meta.lore = mutableListOf("§6このカードを持って報酬と交換しよう！")
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
+        meta.addItemFlags(ItemFlag.HIDE_DESTROYS)
+        meta.addItemFlags(ItemFlag.HIDE_PLACED_ON)
+        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS)
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.isUnbreakable = true
+
+        item.itemMeta = meta
+        return item
+    }
 
 }

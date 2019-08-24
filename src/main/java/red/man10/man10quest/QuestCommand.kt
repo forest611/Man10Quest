@@ -48,7 +48,7 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
                 return true
             }
 
-            plugin.questInventory.finish(p,data)
+            QuestEvent(plugin).finish(p,data)
 
         }
 

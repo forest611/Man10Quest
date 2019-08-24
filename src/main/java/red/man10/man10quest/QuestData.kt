@@ -177,4 +177,5 @@ class Data{
     var unlock = mutableListOf<String>()
     var daily = false
     var number = 0
+    var dispatchCmd = mutableListOf<String>()
 }
