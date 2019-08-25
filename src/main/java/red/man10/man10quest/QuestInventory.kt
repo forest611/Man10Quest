@@ -134,6 +134,13 @@ class QuestInventory(private val plugin:Man10Quest) {
         meta.displayName = data.title
 
         meta.lore = data.lore
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
+        meta.addItemFlags(ItemFlag.HIDE_DESTROYS)
+        meta.addItemFlags(ItemFlag.HIDE_PLACED_ON)
+        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS)
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+
         item.itemMeta = meta
         return item
 
