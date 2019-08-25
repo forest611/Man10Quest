@@ -8,10 +8,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.player.AsyncPlayerChatEvent
-import org.bukkit.event.player.PlayerCommandPreprocessEvent
-import org.bukkit.event.player.PlayerInteractEvent
-import org.bukkit.event.player.PlayerLoginEvent
+import org.bukkit.event.player.*
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 
@@ -134,7 +131,7 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
 
                 p.sendMessage("コマンドは5秒後に実行されます...")
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, {
-                    Bukkit.dispatchCommand(p,e.message)
+                    Bukkit.dispatchCommand(p,e.message.substring(1))
                 },100)
 
 
@@ -178,10 +175,10 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
     }
 
     @EventHandler
-    fun login(e:PlayerLoginEvent){
+    fun login(e: PlayerJoinEvent){
         Thread(Runnable {
             plugin.playerData.getFinishQuest(e.player)
-        })
+        }).start()
     }
 
     fun finish(p:Player,data: Data){

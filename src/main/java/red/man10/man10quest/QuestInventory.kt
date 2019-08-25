@@ -123,6 +123,7 @@ class QuestInventory(private val plugin:Man10Quest) {
         meta.displayName = data.title
 
         meta.lore = data.lore
+        meta.isUnbreakable = true
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
         meta.addItemFlags(ItemFlag.HIDE_DESTROYS)

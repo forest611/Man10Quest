@@ -84,7 +84,7 @@ class QuestData(private val plugin :Man10Quest) {
             }
 
             for (data in files){
-                if (data.name == "config.yml"){
+                if (data.name == "setting.yml"){
                     continue
                 }
                 val yml = YamlConfiguration.loadConfiguration(data)
