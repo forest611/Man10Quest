@@ -1,25 +1,21 @@
 package red.man10.man10quest
 
-import org.apache.commons.lang.mutable.Mutable
 import org.bukkit.Bukkit
 import org.bukkit.configuration.file.YamlConfiguration
-import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.io.File
 import java.lang.StringBuilder
-import java.sql.Time
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
-import java.util.TimerTask
 
 
-
+@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class QuestData(private val plugin :Man10Quest) {
 
     val quest = mutableListOf<Data>()
-    var type = mutableListOf<Data>()
-    var hideType = mutableListOf<Data>()
+    var type = mutableListOf<Type>()
+    var hideType = mutableListOf<Type>()
+
     val name = HashMap<String,Data>()
 
     fun getName(stack:ItemStack):String{
@@ -27,7 +23,6 @@ class QuestData(private val plugin :Man10Quest) {
     }
 
     fun loadQuest(){
-
         quest.clear()
         type.clear()
         hideType.clear()
@@ -35,8 +30,8 @@ class QuestData(private val plugin :Man10Quest) {
 
         Bukkit.getLogger().info("loading files....")
 
-        val Quest = mutableListOf<Data>()
-        val QuestHide = mutableListOf<Data>()
+        val Quest = mutableListOf<Type>()
+        val QuestHide = mutableListOf<Type>()
 
         val folder = File(Bukkit.getServer().pluginManager.getPlugin("Man10Quest").dataFolder,File.separator)
 
@@ -47,36 +42,28 @@ class QuestData(private val plugin :Man10Quest) {
         val file = folder.listFiles().toMutableList()
 
         for (f in file){
-            if (!f.isFile || f.name.indexOf("config") >=0 || f.name.lastIndexOf(".yml") <0){
+            if (f.isFile){
                 continue
             }
+            val files = f.listFiles()
 
-            Bukkit.getLogger().info("loading...${f.name}")
+            val config = YamlConfiguration.loadConfiguration(files[f.list().indexOf("config.yml")])
 
-            val yml = YamlConfiguration.loadConfiguration(f)
+            val t = Type()
 
-            val d = Data()
+            t.name = config.getString("name","quest")
+            t.title = config.getString("title","クエスト1")
+            t.material = config.getString("material","STONE")
+            t.damage = config.getInt("damage",0)
+            t.recRank = config.getString("rank","§e§lGuest")
+            t.hide = config.getBoolean("hide",false)
+            t.unlock = config.getStringList("unlock")
+            t.daily = config.getBoolean("daily",false)
+            t.number = config.getInt("number",-1)
 
-            d.name = yml.getString("name","quest")
-            d.title = yml.getString("title","クエスト1")
-            d.description = yml.getString("description","none")
-            d.material = yml.getString("material","STONE")
-            d.damage = yml.getInt("damage",0)
-            d.type = yml.getString("type","none")
-            d.recRank = yml.getString("rank","§e§lGuest")
-            d.hide = yml.getBoolean("hide",false)
-            d.finishMessage = yml.getString("finishMsg","none")
-            d.replicaTitle = yml.getString("replicaTitle","§e証のレプリカ")
-            d.msg = yml.getStringList("msg" )
-            d.cmd = yml.getStringList("cmd")
-            d.once = yml.getBoolean("once",true)
-            d.unlock = yml.getStringList("unlock")
-            d.daily = yml.getBoolean("daily",false)
-            d.number = yml.getInt("number",-1)
-
-            val l = yml.getStringList("lore")
-            val na = d.name.toCharArray()
-            val buildName = StringBuilder()
+            var l = config.getStringList("lore")
+            var na = t.name.toCharArray()
+            var buildName = StringBuilder()
 
             for (n in na){
 
@@ -84,33 +71,66 @@ class QuestData(private val plugin :Man10Quest) {
             }
 
             l.add(buildName.toString())
-            l.add("§a§l推奨ランク:${d.recRank}§a§l以上")
-            d.lore = l
+            l.add("§a§l推奨ランク:${t.recRank}§a§l以上")
+            t.lore = l
 
 
-            if (d.type == "none"){
+            if (!t.hide){
+                Quest.add(t)
+            }else{
+                QuestHide.add(t)
+            }
 
-                if (!d.hide){
-                    Quest.add(d)
-                }else{
-                    QuestHide.add(d)
+            for (data in files){
+                if (data.name == "config.yml"){
+                    continue
                 }
-            }else{ quest.add(d) }
+                val yml = YamlConfiguration.loadConfiguration(data)
+                val d = Data()
 
-            name[d.name] = d
 
+                d.name = yml.getString("name","quest")
+                d.title = yml.getString("title","クエスト1")
+                d.description = yml.getString("description","none")
+                d.material = yml.getString("material","STONE")
+                d.damage = yml.getInt("damage",0)
+                d.recRank = yml.getString("rank","§e§lGuest")
+                d.hide = yml.getBoolean("hide",false)
+                d.finishMessage = yml.getString("finishMsg","none")
+                d.replicaTitle = yml.getString("replicaTitle","§e証のレプリカ")
+                d.msg = yml.getStringList("msg" )
+                d.cmd = yml.getStringList("cmd")
+                d.once = yml.getBoolean("once",true)
+                d.unlock = yml.getStringList("unlock")
+                d.daily = yml.getBoolean("daily",false)
+                d.number = yml.getInt("number",-1)
+                d.type = t.name
+
+                l = yml.getStringList("lore")
+                na = d.name.toCharArray()
+                buildName = StringBuilder()
+
+                for (n in na){
+
+                    buildName.append("§$n")
+                }
+
+                l.add(buildName.toString())
+                l.add("§a§l推奨ランク:${d.recRank}§a§l以上")
+                d.lore = l
+
+                quest.add(d)
+            }
+            type = sortingTypes(Quest)
+            hideType = sortingTypes(QuestHide)
         }
-
-        type = sortingTypes(Quest)
-
-
     }
 
 
-    fun sortingTypes(data:MutableList<Data>):MutableList<Data>{
-        val sortedList = HashMap<Int,Data>()
+    fun sortingTypes(data:MutableList<Type>):MutableList<Type>{
+        val sortedList = HashMap<Int,Type>()
 
-        val list = mutableListOf<Data>()
+        val list = mutableListOf<Type>()
 
         for (d in data){
             if (d.number == -1){
@@ -178,4 +198,18 @@ class Data{
     var daily = false
     var number = 0
     var dispatchCmd = mutableListOf<String>()
+}
+class Type{
+    var name = ""
+    var title = ""
+    var lore = mutableListOf<String>()
+    var recRank = ""
+    var material = "STONE"
+    var damage = 0
+    var hide = false
+    var start = true
+    var unlock = mutableListOf<String>()
+    var daily = false
+    var number = 0
+
 }

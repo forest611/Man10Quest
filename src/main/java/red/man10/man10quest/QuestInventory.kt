@@ -10,13 +10,6 @@ import org.bukkit.inventory.ItemStack
 class QuestInventory(private val plugin:Man10Quest) {
 
 
-    /*
-
-    inventoryを扱うclass
-
-
-     */
-
     /////////////////
     //クエストタイプ
     //////////////////
@@ -90,8 +83,6 @@ class QuestInventory(private val plugin:Man10Quest) {
         }catch (e:IndexOutOfBoundsException){
 
         }
-
-
         p.openInventory(inv)
     }
     ////////////////
@@ -116,18 +107,36 @@ class QuestInventory(private val plugin:Man10Quest) {
             cMeta.displayName = "§c§lクエストタイプ選択画面に戻る"
             cancel.itemMeta = cMeta
 
-            inv.setItem(48,cancel)
-            inv.setItem(49,cancel)
-            inv.setItem(50,cancel)
+            for (i in 45..54){
+                inv.setItem(i,cancel)
 
+            }
+            player.openInventory(inv)
 
         }
-        player.openInventory(inv)
     }
 
     ///////////////////
     //タイプ選択アイテム
     ////////////////////
+    fun makeItem(data:Type): ItemStack {
+        val item = ItemStack(Material.valueOf(data.material),1,data.damage.toShort())
+        val meta = item.itemMeta
+        meta.displayName = data.title
+
+        meta.lore = data.lore
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
+        meta.addItemFlags(ItemFlag.HIDE_DESTROYS)
+        meta.addItemFlags(ItemFlag.HIDE_PLACED_ON)
+        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS)
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+
+        item.itemMeta = meta
+        return item
+
+    }
+
     fun makeItem(data:Data): ItemStack {
         val item = ItemStack(Material.valueOf(data.material),1,data.damage.toShort())
         val meta = item.itemMeta
@@ -177,9 +186,6 @@ class QuestInventory(private val plugin:Man10Quest) {
     //////////////////////////////////
     //card
     //////////////////////////////////
-
-
-
     fun replicaCard(name:String):ItemStack{
         val data = plugin.questData.name[name]!!
         if (data.hide){
