@@ -28,7 +28,7 @@ class QuestData(private val plugin :Man10Quest) {
         hideType.clear()
         name.clear()
 
-        Bukkit.getLogger().info("loading files....")
+        Bukkit.getLogger().info("Loading files....")
 
         val quest_sort = mutableListOf<Data>()
         val questHide_sort = mutableListOf<Data>()
@@ -47,9 +47,11 @@ class QuestData(private val plugin :Man10Quest) {
             }
             val files = f.listFiles()
 
-            val config = YamlConfiguration.loadConfiguration(files[f.list().indexOf("config.yml")])
+            val config = YamlConfiguration.loadConfiguration(files[f.list().indexOf("setting.yml")])
 
             val t = Data()
+
+            Bukkit.getLogger().info("Loading setting.yml")
 
             t.name = config.getString("name","quest")
             t.title = config.getString("title","クエスト1")
@@ -88,6 +90,8 @@ class QuestData(private val plugin :Man10Quest) {
                 val yml = YamlConfiguration.loadConfiguration(data)
                 val d = Data()
 
+                Bukkit.getLogger().info("Loading yml ${data.name}")
+
                 d.name = yml.getString("name","quest")
                 d.title = yml.getString("title","クエスト1")
                 d.description = yml.getString("description","none")
@@ -120,6 +124,8 @@ class QuestData(private val plugin :Man10Quest) {
 
                 quest.add(d)
             }
+
+            Bukkit.getLogger().info("Loaded setting ${t.name}")
             type = sortingTypes(quest_sort)
             hideType = sortingTypes(questHide_sort)
         }
