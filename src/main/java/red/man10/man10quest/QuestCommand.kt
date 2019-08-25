@@ -130,10 +130,20 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
         }
 
         if (args[0] == "reload"){
+            Bukkit.broadcastMessage("§e§lMan10Questのリロード開始！")
             Thread(Runnable{
                 plugin.questData.loadQuest()
                 sender.sendMessage("§e§lクエストを読み込みました")
+
             }).start()
+            Bukkit.getScheduler().runTask(plugin) {
+                for (p in Bukkit.getOnlinePlayers()){
+                    plugin.playerData.getFinishQuest(p)
+                }
+                sender.sendMessage("§e§lオンラインプレイヤーのデータを読み込みました")
+                Bukkit.broadcastMessage("§e§lMan10Questのリロード完了！")
+            }
+
         }
 
         if (args[0] == "list"){

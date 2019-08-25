@@ -93,7 +93,7 @@ class QuestInventory(private val plugin:Man10Quest) {
 
         Bukkit.getScheduler().runTask(plugin) {
 
-            val quest =plugin.questData.quest - plugin.playerData.getFinishQuest(player)
+            val quest =plugin.questData.quest - plugin.playerData.finishQuest[player]!!.toMutableList()
 
             for (q in quest){
                 if (q.type != type){ continue }
@@ -110,8 +110,6 @@ class QuestInventory(private val plugin:Man10Quest) {
             for (i in 45..53){
                 inv.setItem(i,cancel)
             }
-
-
         }
         player.openInventory(inv)
     }

@@ -1,5 +1,6 @@
 package red.man10.man10quest
 
+import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 
 class Man10Quest : JavaPlugin() {
@@ -30,6 +31,11 @@ class Man10Quest : JavaPlugin() {
         getCommand("mq").executor = QuestCommand(this)
         server.pluginManager.registerEvents(QuestEvent(this),this)
         questData.loadQuest()
+
+        for (p in Bukkit.getOnlinePlayers()){
+            playerData.getFinishQuest(p)
+        }
+
 
     }
 
