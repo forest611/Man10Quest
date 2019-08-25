@@ -13,8 +13,8 @@ import kotlin.collections.HashMap
 class QuestData(private val plugin :Man10Quest) {
 
     val quest = mutableListOf<Data>()
-    var type = mutableListOf<Type>()
-    var hideType = mutableListOf<Type>()
+    var type = mutableListOf<Data>()
+    var hideType = mutableListOf<Data>()
 
     val name = HashMap<String,Data>()
 
@@ -30,8 +30,8 @@ class QuestData(private val plugin :Man10Quest) {
 
         Bukkit.getLogger().info("loading files....")
 
-        val Quest = mutableListOf<Type>()
-        val QuestHide = mutableListOf<Type>()
+        val quest_sort = mutableListOf<Data>()
+        val questHide_sort = mutableListOf<Data>()
 
         val folder = File(Bukkit.getServer().pluginManager.getPlugin("Man10Quest").dataFolder,File.separator)
 
@@ -49,7 +49,7 @@ class QuestData(private val plugin :Man10Quest) {
 
             val config = YamlConfiguration.loadConfiguration(files[f.list().indexOf("config.yml")])
 
-            val t = Type()
+            val t = Data()
 
             t.name = config.getString("name","quest")
             t.title = config.getString("title","クエスト1")
@@ -76,9 +76,9 @@ class QuestData(private val plugin :Man10Quest) {
 
 
             if (!t.hide){
-                Quest.add(t)
+                quest_sort.add(t)
             }else{
-                QuestHide.add(t)
+                questHide_sort.add(t)
             }
 
             for (data in files){
@@ -87,7 +87,6 @@ class QuestData(private val plugin :Man10Quest) {
                 }
                 val yml = YamlConfiguration.loadConfiguration(data)
                 val d = Data()
-
 
                 d.name = yml.getString("name","quest")
                 d.title = yml.getString("title","クエスト1")
@@ -121,16 +120,16 @@ class QuestData(private val plugin :Man10Quest) {
 
                 quest.add(d)
             }
-            type = sortingTypes(Quest)
-            hideType = sortingTypes(QuestHide)
+            type = sortingTypes(quest_sort)
+            hideType = sortingTypes(questHide_sort)
         }
     }
 
 
-    fun sortingTypes(data:MutableList<Type>):MutableList<Type>{
-        val sortedList = HashMap<Int,Type>()
+    fun sortingTypes(data:MutableList<Data>):MutableList<Data>{
+        val sortedList = HashMap<Int,Data>()
 
-        val list = mutableListOf<Type>()
+        val list = mutableListOf<Data>()
 
         for (d in data){
             if (d.number == -1){
@@ -198,18 +197,4 @@ class Data{
     var daily = false
     var number = 0
     var dispatchCmd = mutableListOf<String>()
-}
-class Type{
-    var name = ""
-    var title = ""
-    var lore = mutableListOf<String>()
-    var recRank = ""
-    var material = "STONE"
-    var damage = 0
-    var hide = false
-    var start = true
-    var unlock = mutableListOf<String>()
-    var daily = false
-    var number = 0
-
 }

@@ -119,24 +119,6 @@ class QuestInventory(private val plugin:Man10Quest) {
     ///////////////////
     //タイプ選択アイテム
     ////////////////////
-    fun makeItem(data:Type): ItemStack {
-        val item = ItemStack(Material.valueOf(data.material),1,data.damage.toShort())
-        val meta = item.itemMeta
-        meta.displayName = data.title
-
-        meta.lore = data.lore
-        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
-        meta.addItemFlags(ItemFlag.HIDE_DESTROYS)
-        meta.addItemFlags(ItemFlag.HIDE_PLACED_ON)
-        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS)
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
-
-        item.itemMeta = meta
-        return item
-
-    }
-
     fun makeItem(data:Data): ItemStack {
         val item = ItemStack(Material.valueOf(data.material),1,data.damage.toShort())
         val meta = item.itemMeta
