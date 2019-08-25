@@ -11,6 +11,7 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.AsyncPlayerChatEvent
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
 import org.bukkit.event.player.PlayerInteractEvent
+import org.bukkit.event.player.PlayerLoginEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 
@@ -74,12 +75,12 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
                 return
             }
 
-            if (e.slot in 48..50){
+            if (e.slot >= 45){
                 plugin.questInventory.openQuestType(1,p)
                 return
             }
 
-            if (!plugin.questData.name[plugin.questData.getName(e.currentItem)]!!.start){
+            if (!plugin.questData.get(plugin.questData.getName(e.currentItem)).start){
                 p.sendMessage("§4§lこのクエストは現在受けられません")
                 return
             }
@@ -175,11 +176,20 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
         }
 
     }
+
+    @EventHandler
+    fun login(e:PlayerLoginEvent){
+        Thread(Runnable {
+            plugin.playerData.getFinishQuest(e.player)
+        })
+    }
+
     fun finish(p:Player,data: Data){
         p.inventory.addItem(questCard(data.name))
         if (data.once){
             Thread(Runnable {
                 plugin.playerData.finish(p,data.name)
+                plugin.playerData.getFinishQuest(p)
             }).start()
         }
         plugin.playerData.playerQuest.remove(p)
@@ -225,5 +235,6 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
         item.itemMeta = meta
         return item
     }
+
 
 }

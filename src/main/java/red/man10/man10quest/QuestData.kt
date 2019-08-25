@@ -123,8 +123,9 @@ class QuestData(private val plugin :Man10Quest) {
                 d.lore = l
 
                 quest.add(d)
+                name[d.name] = d
             }
-
+            name[t.name] = t
             Bukkit.getLogger().info("Loaded setting ${t.name}")
             type = sortingTypes(quest_sort)
             hideType = sortingTypes(questHide_sort)

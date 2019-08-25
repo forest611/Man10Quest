@@ -1,11 +1,13 @@
 package red.man10.man10quest
 
 import org.bukkit.entity.Player
+import java.util.concurrent.ConcurrentHashMap
 
 
 class PlayerData(private val plugin:Man10Quest) {
 
     val playerQuest = HashMap<Player,Data?>()
+    val finishQuest = ConcurrentHashMap<Player,MutableList<Data>>()
 
 
     fun getFinishQuest(p:Player) : MutableList<Data>{
@@ -23,19 +25,16 @@ class PlayerData(private val plugin:Man10Quest) {
         rs.close()
         qu.close()
 
+        finishQuest[p] = list
+
         return list
     }
 
-    fun isFinish(player: Player,quest :String): Boolean {
-        val mysql = MySQLManagerV2(plugin,"quest")
+    fun isFinish(p: Player,quest :String): Boolean {
 
-        val q = mysql.query("SELECT * FROM finish_player WHERE uuid='${player.uniqueId}' and quest='$quest';")
-        if(q.rs.next()){
-            q.close()
-            return true
-        }
-        q.close()
-        return false
+        if (finishQuest[p]?.indexOf(plugin.questData.get(quest)) == -1)return false
+
+        return true
 
     }
 
@@ -43,7 +42,7 @@ class PlayerData(private val plugin:Man10Quest) {
 
         if (quest.unlock.isEmpty())return true
 
-        val data = getFinishQuest(p)
+        val data = finishQuest[p]?:return false
 
         for (d in quest.unlock){
             if (data.indexOf(plugin.questData.get(d)) < 0){

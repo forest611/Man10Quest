@@ -107,13 +107,13 @@ class QuestInventory(private val plugin:Man10Quest) {
             cMeta.displayName = "§c§lクエストタイプ選択画面に戻る"
             cancel.itemMeta = cMeta
 
-            for (i in 45..54){
+            for (i in 45..53){
                 inv.setItem(i,cancel)
-
             }
-            player.openInventory(inv)
+
 
         }
+        player.openInventory(inv)
     }
 
     ///////////////////
