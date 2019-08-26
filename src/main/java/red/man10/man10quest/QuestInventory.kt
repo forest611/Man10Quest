@@ -122,6 +122,11 @@ class QuestInventory(private val plugin:Man10Quest) {
         val meta = item.itemMeta
         meta.displayName = data.title
 
+        val l = data.lore
+
+        if (data.type != "" && plugin.event.prize[data.name] == null){
+            l.add("§4§lこのクエストには、現在報酬が設定されていません")
+        }
         meta.lore = data.lore
         meta.isUnbreakable = true
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
@@ -163,73 +168,4 @@ class QuestInventory(private val plugin:Man10Quest) {
         player.openInventory(inv)
 
     }
-
-    //////////////////////////////////
-    //card
-    //////////////////////////////////
-    fun replicaCard(name:String):ItemStack{
-        val data = plugin.questData.name[name]!!
-        if (data.hide){
-            val item = ItemStack(Material.DIAMOND_HOE,1,plugin.damage2.toShort())
-            val meta = item.itemMeta
-            meta.displayName = "§kXX§r§7§l裏クエスト"+data.title+"§8§l達成の証§kXX§r"
-            meta.lore = mutableListOf("§7飾り用の証",data.replicaTitle)
-            meta.isUnbreakable = true
-            meta.addEnchant(Enchantment.LOOT_BONUS_BLOCKS,1,true)
-            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
-            meta.addItemFlags(ItemFlag.HIDE_DESTROYS)
-            meta.addItemFlags(ItemFlag.HIDE_PLACED_ON)
-            meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS)
-            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
-
-            item.itemMeta = meta
-
-            return item
-
-        }
-        val item = ItemStack(Material.DIAMOND_HOE,1,plugin.damage1.toShort())
-        val meta = item.itemMeta
-        meta.displayName = data.title+"§e§l達成の証"
-        meta.lore = mutableListOf("§6飾り用の証",data.replicaTitle)
-        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
-        meta.addItemFlags(ItemFlag.HIDE_DESTROYS)
-        meta.addItemFlags(ItemFlag.HIDE_PLACED_ON)
-        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS)
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
-        meta.isUnbreakable = true
-
-
-        item.itemMeta = meta
-        return item
-
-    }
-
-    fun finishCard(name:String):ItemStack{
-        val data = plugin.questData.name[name]!!
-
-        val sb = StringBuilder()
-
-        for(c in data.name){
-            sb.append("§$c")
-        }
-
-        val item = ItemStack(Material.DIAMOND_HOE,1,plugin.damage1.toShort())
-        val meta = item.itemMeta
-        meta.displayName = data.title+"§e§l達成カード"
-        meta.lore = mutableListOf("§6右クリックでクエストクリア！$sb")
-        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
-        meta.addItemFlags(ItemFlag.HIDE_DESTROYS)
-        meta.addItemFlags(ItemFlag.HIDE_PLACED_ON)
-        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS)
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
-        meta.isUnbreakable = true
-
-        item.itemMeta = meta
-        return item
-
-    }
-
 }

@@ -50,7 +50,9 @@ public class MySQLManagerV2 {
                 "\t`quest` TEXT NULL DEFAULT NULL,\n" +
                 "\t`date` DATE NULL\n" +
                 ");");
-
+        execute("CREATE TABLE if not exists `prize` (" +
+                "`quest` TEXT NULL DEFAULT NULL," +
+                "`prize` TEXT NULL DEFAULT NULL);");
     }
 
 

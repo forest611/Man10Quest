@@ -1,10 +1,14 @@
 package red.man10.man10quest
 
 import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
+import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemFlag
+import org.bukkit.inventory.ItemStack
 
 class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
 
@@ -48,7 +52,7 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
                 return true
             }
 
-            QuestEvent(plugin).finish(p,data)
+            plugin.event.finish(p,data)
 
         }
 
@@ -64,11 +68,12 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
             sender.sendMessage("§b§l/mq finish [player] [quest] クエストを終了させます(script blockに埋め込む場合はconsoleコマンドとして埋めてください)")
             sender.sendMessage("§b§l/mq remove [player] [quest] クエストクリアを取り消します")
             sender.sendMessage("§b§l/mq on [quest] 指定クエストをonにします onのみでプラグインをonにします")
-            sender.sendMessage("§b§l/mq on [quest] 指定クエストをoffにします onのみでプラグインをoffにします")
+            sender.sendMessage("§b§l/mq off [quest] 指定クエストをoffにします onのみでプラグインをoffにします")
             sender.sendMessage("§b§l/mq replica [quest]指定クエストの達成の証(レプリカ)を発行します")
-            sender.sendMessage("§b§l/mq finishCard [quest] クエストを終了させるためのカードを発行します ドロップでクエストクリアなどに")
+            sender.sendMessage("§b§l/mq finishCard [quest] クエストを終了させるためのカードを発行します")
             sender.sendMessage("§b§l/mq reload クエストを再読込します")
             sender.sendMessage("§b§l/mq list 読み込まれているクエストを確認します")
+            sender.sendMessage("§b§l/mq prize [quest] 手持ちのアイテムをクエストの報酬にします")
             sender.sendMessage("§d§l=================================")
         }
 
@@ -122,11 +127,11 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
 
 
         if (args[0] == "replica"){
-            sender.inventory.addItem(plugin.questInventory.replicaCard(args[1]))
+            sender.inventory.addItem(replicaCard(args[1]))
         }
 
         if (args[0] == "finishCard"){
-            sender.inventory.addItem(plugin.questInventory.finishCard(args[1]))
+            sender.inventory.addItem(plugin.event.questCard(args[1]))
         }
 
         if (args[0] == "reload"){
@@ -134,6 +139,9 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
             Thread(Runnable{
                 plugin.questData.loadQuest()
                 sender.sendMessage("§e§lクエストを読み込みました")
+
+                plugin.event.loadPrize()
+                sender.sendMessage("§e§l報酬を読み込みました")
 
             }).start()
             Bukkit.getScheduler().runTask(plugin) {
@@ -152,7 +160,58 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
             }
         }
 
+        if (args[0] == "prize"){
+
+            if (plugin.questData.get(args[2]).name == ""){
+                sender.sendMessage("§4§l存在しないクエストです！！！")
+                return true
+            }
+            Thread(Runnable {
+                plugin.event.setPrize(args[1],sender.inventory.itemInMainHand)
+            }).start()
+
+        }
+
         return true
+    }
+
+    fun replicaCard(name:String): ItemStack {
+        val data = plugin.questData.name[name]!!
+        if (data.hide){
+            val item = ItemStack(Material.DIAMOND_HOE,1,plugin.damage2.toShort())
+            val meta = item.itemMeta
+            meta.displayName = "§kXX§r§7§l裏クエスト"+data.title+"§8§l達成の証§kXX§r"
+            meta.lore = mutableListOf("§7飾り用の証",data.replicaTitle)
+            meta.isUnbreakable = true
+            meta.addEnchant(Enchantment.LOOT_BONUS_BLOCKS,1,true)
+            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
+            meta.addItemFlags(ItemFlag.HIDE_DESTROYS)
+            meta.addItemFlags(ItemFlag.HIDE_PLACED_ON)
+            meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS)
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+
+            item.itemMeta = meta
+
+            return item
+
+        }
+        val item = ItemStack(Material.DIAMOND_HOE,1,plugin.damage1.toShort())
+        val meta = item.itemMeta
+        meta.displayName = data.title+"§e§l達成の証"
+        meta.lore = mutableListOf("§6飾り用の証",data.replicaTitle)
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
+        meta.addItemFlags(ItemFlag.HIDE_DESTROYS)
+        meta.addItemFlags(ItemFlag.HIDE_PLACED_ON)
+        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS)
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+        meta.isUnbreakable = true
+
+
+        item.itemMeta = meta
+        return item
+
     }
 
 }

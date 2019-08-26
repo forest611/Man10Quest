@@ -9,6 +9,7 @@ class Man10Quest : JavaPlugin() {
     lateinit var questData : QuestData
     lateinit var playerData : PlayerData
     lateinit var thread : Thread
+    lateinit var event : QuestEvent
 
     var damage1 = 0
     var damage2 = 0
@@ -25,12 +26,14 @@ class Man10Quest : JavaPlugin() {
         questInventory = QuestInventory(this)
         questData = QuestData(this)
         playerData = PlayerData(this)
+        event = QuestEvent(this)
 
         questData.dailyProcess()
 
         getCommand("mq").executor = QuestCommand(this)
-        server.pluginManager.registerEvents(QuestEvent(this),this)
+        server.pluginManager.registerEvents(event,this)
         questData.loadQuest()
+        event.loadPrize()
 
         for (p in Bukkit.getOnlinePlayers()){
             playerData.getFinishQuest(p)

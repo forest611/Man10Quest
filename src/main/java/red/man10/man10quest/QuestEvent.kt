@@ -11,8 +11,15 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.*
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
+import org.bukkit.util.io.BukkitObjectInputStream
+import org.bukkit.util.io.BukkitObjectOutputStream
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 
 class QuestEvent(private val plugin:Man10Quest) : Listener{
+
+    val prize = HashMap<String,ItemStack>()
 
     @EventHandler
     fun clickEvent(e: InventoryClickEvent){
@@ -182,7 +189,9 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
     }
 
     fun finish(p:Player,data: Data){
-        p.inventory.addItem(questCard(data.name))
+        if (prize[data.name] != null){
+            p.inventory.addItem(prize[data.name])
+        }
         if (data.once){
             Thread(Runnable {
                 plugin.playerData.finish(p,data.name)
@@ -199,28 +208,17 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
 
     fun questCard(name: String): ItemStack {
         val data = plugin.questData.name[name]!!
-        if (data.hide){
-            val item = ItemStack(Material.DIAMOND_HOE,1,plugin.damage2.toShort())
-            val meta = item.itemMeta
-            meta.displayName = "§kXX§r§7§l裏クエスト"+data.title+"§8§l達成の証§kXX§r"
-            meta.lore = mutableListOf("§7裏クエスト達成おめでとうございます","§8ぜひ豪華な景品と交換してください！")
-            meta.isUnbreakable = true
-            meta.addEnchant(Enchantment.LOOT_BONUS_BLOCKS,1,true)
-            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
-            meta.addItemFlags(ItemFlag.HIDE_DESTROYS)
-            meta.addItemFlags(ItemFlag.HIDE_PLACED_ON)
-            meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS)
-            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
-            item.itemMeta = meta
 
-            return item
+        val sb = StringBuilder()
 
+        for(c in data.name){
+            sb.append("§$c")
         }
+
         val item = ItemStack(Material.DIAMOND_HOE,1,plugin.damage1.toShort())
         val meta = item.itemMeta
-        meta.displayName = data.title+"§e§l達成の証"
-        meta.lore = mutableListOf("§6このカードを持って報酬と交換しよう！")
+        meta.displayName = data.title+"§e§l達成カード"
+        meta.lore = mutableListOf("§6右クリックでクエストクリア！$sb")
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
         meta.addItemFlags(ItemFlag.HIDE_DESTROYS)
@@ -231,7 +229,72 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
 
         item.itemMeta = meta
         return item
+
     }
 
+    fun loadPrize(){
+        val mysql = MySQLManagerV2(plugin,"quest")
+
+        val query = mysql.query("select * from prize;")
+
+        val rs = query.rs
+        while (rs.next()){
+            prize[rs.getString("quest")] = itemFromBase64(rs.getString("prize"))!!
+        }
+        rs.close()
+        query.close()
+    }
+
+    fun setPrize(name:String,stack: ItemStack){
+        MySQLManagerV2(plugin,"quest").execute("INSERT INTO prize VALUES(`name`,`${itemToBase64(stack)}`);")
+
+        prize[name] = stack
+
+    }
+
+
+    fun itemFromBase64(data: String): ItemStack? {
+        try {
+            val inputStream = ByteArrayInputStream(Base64Coder.decodeLines(data))
+            val dataInput = BukkitObjectInputStream(inputStream)
+            val items = arrayOfNulls<ItemStack>(dataInput.readInt())
+
+            // Read the serialized inventory
+            for (i in items.indices) {
+                items[i] = dataInput.readObject() as ItemStack
+            }
+
+            dataInput.close()
+            return items[0]
+        } catch (e: Exception) {
+            return null
+        }
+
+    }
+
+    @Throws(IllegalStateException::class)
+    fun itemToBase64(item: ItemStack): String {
+        try {
+            val outputStream = ByteArrayOutputStream()
+            val dataOutput = BukkitObjectOutputStream(outputStream)
+            val items = arrayOfNulls<ItemStack>(1)
+            items[0] = item
+            dataOutput.writeInt(items.size)
+
+            for (i in items.indices) {
+                dataOutput.writeObject(items[i])
+            }
+
+            dataOutput.close()
+            val base64: String = Base64Coder.encodeLines(outputStream.toByteArray())
+
+            return base64
+
+        } catch (e: Exception) {
+            throw IllegalStateException("Unable to save item stacks.", e)
+        }
+
+
+    }
 
 }
