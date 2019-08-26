@@ -124,9 +124,6 @@ class QuestInventory(private val plugin:Man10Quest) {
 
         val l = data.lore
 
-        if (data.type != "" && plugin.event.prize[data.name] == null){
-            l.add("§4§lこのクエストには、現在報酬が設定されていません")
-        }
         meta.lore = data.lore
         meta.isUnbreakable = true
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)

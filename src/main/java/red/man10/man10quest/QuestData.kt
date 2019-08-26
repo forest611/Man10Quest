@@ -113,6 +113,11 @@ class QuestData(private val plugin :Man10Quest) {
                 na = d.name.toCharArray()
                 buildName = StringBuilder()
 
+                if (plugin.event.prize[d.name] == null){
+                    l.add("§4§lこのクエストには、現在報酬が設定されていません")
+                }
+
+
                 for (n in na){
 
                     buildName.append("§$n")

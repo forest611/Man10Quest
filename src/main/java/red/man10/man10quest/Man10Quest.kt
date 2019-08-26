@@ -32,8 +32,9 @@ class Man10Quest : JavaPlugin() {
 
         getCommand("mq").executor = QuestCommand(this)
         server.pluginManager.registerEvents(event,this)
-        questData.loadQuest()
         event.loadPrize()
+        questData.loadQuest()
+
 
         for (p in Bukkit.getOnlinePlayers()){
             playerData.getFinishQuest(p)

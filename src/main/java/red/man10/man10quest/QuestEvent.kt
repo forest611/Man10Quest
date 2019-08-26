@@ -75,7 +75,8 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
         }
         ////////////////quest menu
         if (e.inventory.title.indexOf("§e§lクエストを選択") >=0){
-            if (e.currentItem == null || !e.currentItem.hasItemMeta()){
+            val item = e.currentItem
+            if (item == null || !item.hasItemMeta()){
                 return
             }
 
@@ -84,14 +85,14 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
                 return
             }
 
-            if (!plugin.questData.get(plugin.questData.getName(e.currentItem)).start){
+            if (!plugin.questData.get(plugin.questData.getName(item)).start){
                 p.sendMessage("§4§lこのクエストは現在受けられません")
                 return
             }
             p.closeInventory()
-            plugin.playerData.playerQuest[p] = plugin.questData.name[plugin.questData.getName(e.currentItem)]!!
+            plugin.playerData.playerQuest[p] = plugin.questData.get(plugin.questData.getName(item))
             p.sendMessage("§e§lクエストを開始しました")
-            p.sendMessage(plugin.questData.name[plugin.questData.getName(e.currentItem)]!!.description)
+            p.sendMessage(plugin.questData.name[plugin.questData.getName(item)]!!.description)
             return
         }
         ////////////////////// quest menu
@@ -157,7 +158,6 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
 
             if (!plugin.playerData.isPlay(p))return
 
-
             val item = p.inventory.itemInMainHand?:return
 
             if (item.itemMeta == null)return
@@ -165,12 +165,14 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
             if (!item.itemMeta.hasLore())return
 
             if (item.itemMeta.lore[0].indexOf("§6右クリックでクエストクリア！") >0)return
-
             val name = item.itemMeta.lore[0].replace("§6右クリックでクエストクリア！","").replace("§","")
 
             if (plugin.questData.name[name] != null){
 
-                p.inventory.removeItem(item)
+                if (name != plugin.playerData.playerQuest[p]!!.name)return
+
+                item.amount = item.amount -1
+                p.inventory.itemInMainHand = item
 
                 if (plugin.playerData.isFinish(p,name))return
 
@@ -186,9 +188,11 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
         Thread(Runnable {
             plugin.playerData.getFinishQuest(e.player)
         }).start()
+        Bukkit.getLogger().info("${e.player} ... loaded DB")
     }
 
     fun finish(p:Player,data: Data){
+        p.sendMessage("§e§lクエストクリア！！")
         if (prize[data.name] != null){
             p.inventory.addItem(prize[data.name])
         }
@@ -246,10 +250,9 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
     }
 
     fun setPrize(name:String,stack: ItemStack){
-        MySQLManagerV2(plugin,"quest").execute("INSERT INTO prize VALUES(`name`,`${itemToBase64(stack)}`);")
+        MySQLManagerV2(plugin,"quest").execute("INSERT INTO prize VALUES('$name','${itemToBase64(stack)}');")
 
         prize[name] = stack
-
     }
 
 

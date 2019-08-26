@@ -73,7 +73,7 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
             sender.sendMessage("§b§l/mq finishCard [quest] クエストを終了させるためのカードを発行します")
             sender.sendMessage("§b§l/mq reload クエストを再読込します")
             sender.sendMessage("§b§l/mq list 読み込まれているクエストを確認します")
-            sender.sendMessage("§b§l/mq prize [quest] 手持ちのアイテムをクエストの報酬にします")
+            sender.sendMessage("§b§l/mq prize [quest] 手持ちのアイテムをクエストの報酬にします リロードもされるので注意してください")
             sender.sendMessage("§d§l=================================")
         }
 
@@ -136,15 +136,13 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
 
         if (args[0] == "reload"){
             Bukkit.broadcastMessage("§e§lMan10Questのリロード開始！")
-            Thread(Runnable{
+            Bukkit.getScheduler().runTask(plugin) {
+                plugin.event.loadPrize()
+                sender.sendMessage("§e§l報酬を読み込みました")
                 plugin.questData.loadQuest()
                 sender.sendMessage("§e§lクエストを読み込みました")
 
-                plugin.event.loadPrize()
-                sender.sendMessage("§e§l報酬を読み込みました")
 
-            }).start()
-            Bukkit.getScheduler().runTask(plugin) {
                 for (p in Bukkit.getOnlinePlayers()){
                     plugin.playerData.getFinishQuest(p)
                 }
@@ -162,13 +160,31 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
 
         if (args[0] == "prize"){
 
-            if (plugin.questData.get(args[2]).name == ""){
+            if (plugin.questData.get(args[1]).name == ""){
                 sender.sendMessage("§4§l存在しないクエストです！！！")
                 return true
             }
-            Thread(Runnable {
+            Bukkit.broadcastMessage("§e§lMan10Questのリロード開始！")
+
+            Bukkit.getScheduler().runTask(plugin) {
                 plugin.event.setPrize(args[1],sender.inventory.itemInMainHand)
-            }).start()
+
+                sender.sendMessage("§e§l報酬を登録できました！")
+
+                plugin.event.loadPrize()
+                sender.sendMessage("§e§l報酬を読み込みました")
+
+                plugin.questData.loadQuest()
+                sender.sendMessage("§e§lクエストを読み込みました")
+
+
+                for (p in Bukkit.getOnlinePlayers()){
+                    plugin.playerData.getFinishQuest(p)
+                }
+                sender.sendMessage("§e§lオンラインプレイヤーのデータを読み込みました")
+                Bukkit.broadcastMessage("§e§lMan10Questのリロード完了！")
+            }
+
 
         }
 
