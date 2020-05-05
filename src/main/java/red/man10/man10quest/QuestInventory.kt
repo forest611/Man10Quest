@@ -2,10 +2,12 @@ package red.man10.man10quest
 
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
+import org.bukkit.persistence.PersistentDataType
 
 class QuestInventory(private val plugin:Man10Quest) {
 
@@ -18,13 +20,13 @@ class QuestInventory(private val plugin:Man10Quest) {
 
         val next = ItemStack(Material.PAPER)
         val nMeta = next.itemMeta
-        nMeta.displayName = "§6§l次のページ"
+        nMeta.setDisplayName("§6§l次のページ")
         nMeta.lore = mutableListOf((page+1).toString())
         next.itemMeta = nMeta
 
         val previous = ItemStack(Material.PAPER)
         val pMeta = previous.itemMeta
-        pMeta.displayName = "§6§l前のページ"
+        pMeta.setDisplayName("§6§l前のページ")
         pMeta.lore = mutableListOf((page-1).toString())
         previous.itemMeta = pMeta
 
@@ -56,13 +58,13 @@ class QuestInventory(private val plugin:Man10Quest) {
 
         val next = ItemStack(Material.PAPER)
         val nMeta = next.itemMeta
-        nMeta.displayName = "§0§l次のページ"
+        nMeta.setDisplayName( "§0§l次のページ")
         nMeta.lore = mutableListOf((page+1).toString())
         next.itemMeta = nMeta
 
         val previous = ItemStack(Material.PAPER)
         val pMeta = previous.itemMeta
-        pMeta.displayName = "§0§l前のページ"
+        pMeta.setDisplayName("§0§l前のページ")
         pMeta.lore = mutableListOf((page-1).toString())
         previous.itemMeta = pMeta
 
@@ -91,7 +93,7 @@ class QuestInventory(private val plugin:Man10Quest) {
     fun openQuestMenu(type:String,player:Player){
         val inv = Bukkit.createInventory(null,54,"§e§lクエストを選択§m§a§n§1§0§Q§u§e§s§t")
 
-        Bukkit.getScheduler().runTask(plugin) {
+        Bukkit.getScheduler().runTask(plugin, Runnable {
 
             val quest =plugin.questData.quest - plugin.playerData.finishQuest[player]!!.toMutableList()
 
@@ -102,25 +104,28 @@ class QuestInventory(private val plugin:Man10Quest) {
                 inv.addItem(makeItem(q))
             }
 
-            val cancel = ItemStack(Material.STAINED_GLASS_PANE,1,14)
+            val cancel = ItemStack(Material.RED_STAINED_GLASS_PANE,1)
             val cMeta = cancel.itemMeta
-            cMeta.displayName = "§c§lクエストタイプ選択画面に戻る"
+            cMeta.setDisplayName("§c§lクエストタイプ選択画面に戻る")
             cancel.itemMeta = cMeta
 
             for (i in 45..53){
                 inv.setItem(i,cancel)
             }
-        }
-        player.openInventory(inv)
+            player.openInventory(inv)
+
+        })
     }
 
     ///////////////////
     //タイプ選択アイテム
     ////////////////////
     fun makeItem(data:Data): ItemStack {
-        val item = ItemStack(Material.valueOf(data.material),1,data.damage.toShort())
+        val item = ItemStack(Material.valueOf(data.material),1)
         val meta = item.itemMeta
-        meta.displayName = data.title
+        meta.setDisplayName(data.title)
+
+        meta.setCustomModelData(data.damage)
 
         val l = data.lore
 
@@ -132,6 +137,8 @@ class QuestInventory(private val plugin:Man10Quest) {
         meta.addItemFlags(ItemFlag.HIDE_PLACED_ON)
         meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS)
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES)
+
+        meta.persistentDataContainer.set(NamespacedKey(plugin,"name"), PersistentDataType.STRING,data.name)
 
         item.itemMeta = meta
         return item
@@ -149,13 +156,13 @@ class QuestInventory(private val plugin:Man10Quest) {
 
         val ex = ItemStack(Material.PAPER)
         val meta1 = ex.itemMeta
-        meta1.displayName = "§6§lクエスト内容を確認"
+        meta1.setDisplayName("§6§lクエスト内容を確認")
         meta1.lore = data.lore
         ex.itemMeta = meta1
 
-        val retire = ItemStack(Material.WOOD_DOOR)
+        val retire = ItemStack(Material.OAK_DOOR)
         val meta2 = retire.itemMeta
-        meta2.displayName ="§6§lクエストを中断する"
+        meta2.setDisplayName("§6§lクエストを中断する")
         meta2.lore = mutableListOf("§4§lクエストを中断した場合","§4§lもう一度はじめから","§4§lクエストを始める必要があります")
         retire.itemMeta = meta2
 

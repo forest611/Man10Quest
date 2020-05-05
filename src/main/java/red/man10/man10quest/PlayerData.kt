@@ -1,6 +1,7 @@
 package red.man10.man10quest
 
 import org.bukkit.entity.Player
+import red.man10.man10drugplugin.MySQLManager
 import java.util.concurrent.ConcurrentHashMap
 
 
@@ -13,17 +14,15 @@ class PlayerData(private val plugin:Man10Quest) {
     fun getFinishQuest(p:Player) : MutableList<Data>{
         val list = mutableListOf<Data>()
 
-        val mysql = MySQLManagerV2(plugin,"quest")
+        val mysql = MySQLManager(plugin,"quest")
 
-        val qu = mysql.query("SELECT * FROM finish_player WHERE uuid='${p.uniqueId}';")
-
-        val rs = qu.rs
+        val rs = mysql.query("SELECT * FROM finish_player WHERE uuid='${p.uniqueId}';")!!
 
         while (rs.next()){
             list.add(plugin.questData.get(rs.getString("quest")))
         }
         rs.close()
-        qu.close()
+        mysql.close()
 
         finishQuest[p] = list
 
@@ -53,7 +52,7 @@ class PlayerData(private val plugin:Man10Quest) {
     }
 
     fun finish(player:Player,name:String){
-        val mysql = MySQLManagerV2(plugin,"quest")
+        val mysql = MySQLManager(plugin,"quest")
 
         mysql.execute("INSERT INTO finish_player VALUE('${player.name}','${player.uniqueId}','$name',now());")
     }
@@ -65,7 +64,7 @@ class PlayerData(private val plugin:Man10Quest) {
         return true
     }
     fun remove(player:Player, name:String){
-        val mysql = MySQLManagerV2(plugin,"quest")
+        val mysql = MySQLManager(plugin,"quest")
 
         mysql.execute("DELETE FROM finish_player WHERE player='${player.name}'and quest='$name';")
     }

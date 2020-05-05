@@ -30,7 +30,7 @@ class Man10Quest : JavaPlugin() {
 
         questData.dailyProcess()
 
-        getCommand("mq").executor = QuestCommand(this)
+        getCommand("mq")!!.setExecutor(QuestCommand(this))
         server.pluginManager.registerEvents(event,this)
         event.loadPrize()
         questData.loadQuest()

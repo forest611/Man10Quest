@@ -1,8 +1,11 @@
 package red.man10.man10quest
 
 import org.bukkit.Bukkit
+import org.bukkit.NamespacedKey
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
+import org.bukkit.persistence.PersistentDataType
+import red.man10.man10drugplugin.MySQLManager
 import java.io.File
 import java.lang.StringBuilder
 import java.util.*
@@ -19,7 +22,8 @@ class QuestData(private val plugin :Man10Quest) {
     val name = HashMap<String,Data>()
 
     fun getName(stack:ItemStack):String{
-        return stack.itemMeta.lore[stack.itemMeta.lore.size-2].replace("§","")
+        val meta = stack.itemMeta
+        return meta.persistentDataContainer[NamespacedKey(plugin,"name"), PersistentDataType.STRING]?:return ""
     }
 
     fun loadQuest(){
@@ -33,7 +37,7 @@ class QuestData(private val plugin :Man10Quest) {
         val quest_sort = mutableListOf<Data>()
         val questHide_sort = mutableListOf<Data>()
 
-        val folder = File(Bukkit.getServer().pluginManager.getPlugin("Man10Quest").dataFolder,File.separator)
+        val folder = File(Bukkit.getServer().pluginManager.getPlugin("Man10Quest")!!.dataFolder,File.separator)
 
         if (!folder.exists()){
             return
@@ -53,28 +57,19 @@ class QuestData(private val plugin :Man10Quest) {
 
             Bukkit.getLogger().info("Loading setting.yml")
 
-            t.name = config.getString("name","quest")
-            t.title = config.getString("title","クエスト1")
-            t.material = config.getString("material","STONE")
+            t.name = config.getString("name","quest")!!
+            t.title = config.getString("title","クエスト1")!!
+            t.material = config.getString("material","STONE")!!
             t.damage = config.getInt("damage",0)
-            t.recRank = config.getString("rank","§e§lGuest")
+            t.recRank = config.getString("rank","§e§lGuest")!!
             t.hide = config.getBoolean("hide",false)
             t.unlock = config.getStringList("unlock")
             t.daily = config.getBoolean("daily",false)
             t.number = config.getInt("number",-1)
 
-            var l = config.getStringList("lore")
-            var na = t.name.toCharArray()
-            var buildName = StringBuilder()
-
-            for (n in na){
-
-                buildName.append("§$n")
-            }
-
-            l.add(buildName.toString())
-            l.add("§a§l推奨ランク:${t.recRank}§a§l以上")
-            t.lore = l
+            var lore = config.getStringList("lore")
+            lore.add("§a§l推奨ランク:${t.recRank}§a§l以上")
+            t.lore = lore
 
 
             if (!t.hide){
@@ -92,15 +87,15 @@ class QuestData(private val plugin :Man10Quest) {
 
                 Bukkit.getLogger().info("Loading yml ${data.name}")
 
-                d.name = yml.getString("name","quest")
-                d.title = yml.getString("title","クエスト1")
-                d.description = yml.getString("description","none")
-                d.material = yml.getString("material","STONE")
+                d.name = yml.getString("name","quest")!!
+                d.title = yml.getString("title","クエスト1")!!
+                d.description = yml.getString("description","none")!!
+                d.material = yml.getString("material","STONE")!!
                 d.damage = yml.getInt("damage",0)
-                d.recRank = yml.getString("rank","§e§lGuest")
+                d.recRank = yml.getString("rank","§e§lGuest")!!
                 d.hide = yml.getBoolean("hide",false)
-                d.finishMessage = yml.getString("finishMsg","none")
-                d.replicaTitle = yml.getString("replicaTitle","§e証のレプリカ")
+                d.finishMessage = yml.getString("finishMsg","none")!!
+                d.replicaTitle = yml.getString("replicaTitle","§e証のレプリカ")!!
                 d.msg = yml.getStringList("msg" )
                 d.cmd = yml.getStringList("cmd")
                 d.once = yml.getBoolean("once",true)
@@ -109,23 +104,13 @@ class QuestData(private val plugin :Man10Quest) {
                 d.number = yml.getInt("number",-1)
                 d.type = t.name
 
-                l = yml.getStringList("lore")
-                na = d.name.toCharArray()
-                buildName = StringBuilder()
+                lore = yml.getStringList("lore")
 
                 if (plugin.event.prize[d.name] == null){
-                    l.add("§4§lこのクエストには、現在報酬が設定されていません")
+                    lore.add("§4§lこのクエストには、現在報酬が設定されていません")
                 }
-
-
-                for (n in na){
-
-                    buildName.append("§$n")
-                }
-
-                l.add(buildName.toString())
-                l.add("§a§l推奨ランク:${d.recRank}§a§l以上")
-                d.lore = l
+                lore.add("§a§l推奨ランク:${d.recRank}§a§l以上")
+                d.lore = lore
 
                 quest.add(d)
                 name[d.name] = d
@@ -155,7 +140,7 @@ class QuestData(private val plugin :Man10Quest) {
     }
 
     fun dailyProcess(){
-        plugin.thread = Thread(Runnable {
+        Thread(Runnable {
 
             val w = true
             while (w){
@@ -163,7 +148,7 @@ class QuestData(private val plugin :Man10Quest) {
                 val dif = (Date().time - plugin.config.getLong("daily"))/(1000*60*60)
 
                 if (dif>=24){
-                    val mysql = MySQLManagerV2(plugin,"quest")
+                    val mysql = MySQLManager(plugin,"quest")
 
                     for (q in quest){
                         if (!q.daily)continue

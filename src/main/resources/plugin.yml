@@ -1,5 +1,7 @@
 name: Man10Quest
-version: @version@
+version: 1.0
+softdepend:
+  - Man10CommonLibs
 main: red.man10.man10quest.Man10Quest
 commands:
   mq:

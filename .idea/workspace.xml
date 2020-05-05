@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="5b6d0a24-8dd8-4f45-9090-bcdb361f00d2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/Man10Quest.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/MySQLFunc.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/MySQLManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/Man10Quest.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/Man10Quest.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/Man10Quest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/Man10Quest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/MySQLConnectV2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/MySQLManagerV2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/PlayerData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/PlayerData.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestCommand.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestCommand.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestData.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestEvent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestEvent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestInventory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestInventory.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="1.12" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1bUdvzhVxk0GlSuJWowk12ggOjF" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5b6d0a24-8dd8-4f45-9090-bcdb361f00d2" name="Default Changelist" comment="" />
+      <created>1588690840245</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1588690840245</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="512" y="169" key="#Project_Structure" timestamp="1588690860761">
+      <screen x="0" y="23" width="2048" height="1129" />
+    </state>
+    <state x="512" y="169" key="#Project_Structure/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588690860761" />
+    <state x="812" y="310" key="#com.intellij.ide.util.MemberChooser" timestamp="1588692170654">
+      <screen x="0" y="23" width="2048" height="1129" />
+    </state>
+    <state x="812" y="310" key="#com.intellij.ide.util.MemberChooser/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588692170654" />
+    <state x="762" y="341" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1588691866112">
+      <screen x="0" y="23" width="2048" height="1129" />
+    </state>
+    <state x="762" y="341" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588691866112" />
+    <state x="512" y="169" key="SettingsEditor" timestamp="1588694233798">
+      <screen x="0" y="23" width="2048" height="1129" />
+    </state>
+    <state x="512" y="169" key="SettingsEditor/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588694233798" />
+    <state x="624" y="327" key="Vcs.Push.Dialog.v2" timestamp="1588691119462">
+      <screen x="0" y="23" width="2048" height="1129" />
+    </state>
+    <state x="624" y="327" key="Vcs.Push.Dialog.v2/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588691119462" />
+    <state x="689" y="276" width="670" height="676" key="search.everywhere.popup" timestamp="1588692471077">
+      <screen x="0" y="23" width="2048" height="1129" />
+    </state>
+    <state x="689" y="276" width="670" height="676" key="search.everywhere.popup/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588692471077" />
+  </component>
+</project>

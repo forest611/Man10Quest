@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.util.io.BukkitObjectInputStream
 import org.bukkit.util.io.BukkitObjectOutputStream
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder
+import red.man10.man10drugplugin.MySQLManager
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 
@@ -24,38 +25,40 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
     @EventHandler
     fun clickEvent(e: InventoryClickEvent){
 
-        if (e.inventory.title.indexOf("§m§a§n§1§0§Q§u§e§s§t") <= 0){
+
+        if (e.view.title.indexOf("§m§a§n§1§0§Q§u§e§s§t") <= 0){
             return
         }
 
         e.isCancelled = true
 
         val p = e.whoClicked as Player
-
+        val item = e.currentItem?:return
 
         ////////////////type/////////////////////
-        if (e.inventory.title.indexOf("§e§lクエストタイプを選択") >=0){
+        if (e.view.title.indexOf("§e§lクエストタイプを選択") >=0){
 
             if(e.slot == 0){
                 plugin.questInventory.openHideQuest(1,p)
                 return
             }
 
-            if (e.slot == 9 || e.slot == 17){
-                if (e.currentItem == null || !e.currentItem.hasItemMeta()){ return }
 
-                plugin.questInventory.openQuestType(e.currentItem.itemMeta.lore[0].toInt(),p)
+            if (e.slot == 9 || e.slot == 17){
+                if (item.hasItemMeta()){ return }
+
+                plugin.questInventory.openQuestType(item.itemMeta.lore!![0].toInt(),p)
                 return
             }
 
             if (e.slot == 11||e.slot == 13||e.slot == 15){
-                if (e.currentItem == null || !e.currentItem.hasItemMeta()){ return }
-                plugin.questInventory.openQuestMenu(plugin.questData.getName(e.currentItem),e.whoClicked as Player)
+                if (!item.hasItemMeta()){ return }
+                plugin.questInventory.openQuestMenu(plugin.questData.getName(item),e.whoClicked as Player)
             }
             return
         }
         ////////////////type hide/////////////////////
-        if (e.inventory.title.indexOf("§0§l裏クエスト") >=0){
+        if (e.view.title.indexOf("§0§l裏クエスト") >=0){
 
             if(e.slot == 0){
                 plugin.questInventory.openQuestType(1,p)
@@ -63,20 +66,19 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
             }
 
             if (e.slot == 9 || e.slot == 17){
-                plugin.questInventory.openHideQuest(e.currentItem.itemMeta.lore[0].toInt(),p)
+                plugin.questInventory.openHideQuest(item.itemMeta.lore!![0].toInt(),p)
                 return
             }
 
             if (e.slot == 11||e.slot == 13||e.slot == 15){
-                if (e.currentItem == null || !e.currentItem.hasItemMeta()){ return }
-                plugin.questInventory.openQuestMenu(plugin.questData.getName(e.currentItem),e.whoClicked as Player)
+                if (!item.hasItemMeta()){ return }
+                plugin.questInventory.openQuestMenu(plugin.questData.getName(item),e.whoClicked as Player)
             }
             return
         }
         ////////////////quest menu
-        if (e.inventory.title.indexOf("§e§lクエストを選択") >=0){
-            val item = e.currentItem
-            if (item == null || !item.hasItemMeta()){
+        if (e.view.title.indexOf("§e§lクエストを選択") >=0){
+            if (!item.hasItemMeta()){
                 return
             }
 
@@ -98,7 +100,7 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
         ////////////////////// quest menu
         if (e.slot == 11){
             p.closeInventory()
-            p.sendMessage(plugin.questData.name[plugin.questData.getName(e.currentItem)]!!.description)
+            p.sendMessage(plugin.questData.name[plugin.questData.getName(item)]!!.description)
             return
         }
         if (e.slot == 15){
@@ -109,7 +111,6 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
         }
 
     }
-
 
     @EventHandler
     fun msgEvent(e: AsyncPlayerChatEvent){
@@ -158,26 +159,23 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
 
             if (!plugin.playerData.isPlay(p))return
 
-            val item = p.inventory.itemInMainHand?:return
+            val item = p.inventory.itemInMainHand
 
-            if (item.itemMeta == null)return
             if (!item.hasItemMeta())return
             if (!item.itemMeta.hasLore())return
 
-            if (item.itemMeta.lore[0].indexOf("§6右クリックでクエストクリア！") >0)return
-            val name = item.itemMeta.lore[0].replace("§6右クリックでクエストクリア！","").replace("§","")
+            if ((item.itemMeta.lore?:return)[0].indexOf("§6右クリックでクエストクリア！") >0)return
+            val name = item.itemMeta.lore!![0].replace("§6右クリックでクエストクリア！","").replace("§","")
 
             if (plugin.questData.name[name] != null){
 
                 if (name != plugin.playerData.playerQuest[p]!!.name)return
 
                 item.amount = item.amount -1
-                p.inventory.itemInMainHand = item
 
                 if (plugin.playerData.isFinish(p,name))return
 
                 finish(p,plugin.playerData.playerQuest[p]!!)
-
             }
         }
 
@@ -219,9 +217,10 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
             sb.append("§$c")
         }
 
-        val item = ItemStack(Material.DIAMOND_HOE,1,plugin.damage1.toShort())
+        val item = ItemStack(Material.DIAMOND_HOE,1)
         val meta = item.itemMeta
-        meta.displayName = data.title+"§e§l達成カード"
+        meta.setCustomModelData(plugin.damage1)
+        meta.setDisplayName(data.title+"§e§l達成カード")
         meta.lore = mutableListOf("§6右クリックでクエストクリア！$sb")
         meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
@@ -237,20 +236,19 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
     }
 
     fun loadPrize(){
-        val mysql = MySQLManagerV2(plugin,"quest")
+        val mysql = MySQLManager(plugin,"quest")
 
-        val query = mysql.query("select * from prize;")
+        val rs = mysql.query("select * from prize;")?:return
 
-        val rs = query.rs
         while (rs.next()){
             prize[rs.getString("quest")] = itemFromBase64(rs.getString("prize"))!!
         }
         rs.close()
-        query.close()
+        mysql.close()
     }
 
     fun setPrize(name:String,stack: ItemStack){
-        MySQLManagerV2(plugin,"quest").execute("INSERT INTO prize VALUES('$name','${itemToBase64(stack)}');")
+        MySQLManager(plugin,"quest").execute("INSERT INTO prize VALUES('$name','${itemToBase64(stack)}');")
 
         prize[name] = stack
     }
@@ -296,8 +294,5 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
         } catch (e: Exception) {
             throw IllegalStateException("Unable to save item stacks.", e)
         }
-
-
     }
-
 }
