@@ -7,7 +7,6 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import red.man10.man10drugplugin.MySQLManager
 import java.io.File
-import java.lang.StringBuilder
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -34,8 +33,8 @@ class QuestData(private val plugin :Man10Quest) {
 
         Bukkit.getLogger().info("Loading files....")
 
-        val quest_sort = mutableListOf<Data>()
-        val questHide_sort = mutableListOf<Data>()
+        val questSort = mutableListOf<Data>()
+        val questHideSort = mutableListOf<Data>()
 
         val folder = File(Bukkit.getServer().pluginManager.getPlugin("Man10Quest")!!.dataFolder,File.separator)
 
@@ -73,9 +72,9 @@ class QuestData(private val plugin :Man10Quest) {
 
 
             if (!t.hide){
-                quest_sort.add(t)
+                questSort.add(t)
             }else{
-                questHide_sort.add(t)
+                questHideSort.add(t)
             }
 
             for (data in files){
@@ -117,8 +116,8 @@ class QuestData(private val plugin :Man10Quest) {
             }
             name[t.name] = t
             Bukkit.getLogger().info("Loaded setting ${t.name}")
-            type = sortingTypes(quest_sort)
-            hideType = sortingTypes(questHide_sort)
+            type = sortingTypes(questSort)
+            hideType = sortingTypes(questHideSort)
         }
     }
 
@@ -161,11 +160,10 @@ class QuestData(private val plugin :Man10Quest) {
                     Bukkit.getServer().broadcastMessage("§eデイリークエストがリセットされました")
 
                 }
-                Thread.sleep(100000)
+                Thread.sleep(3600000)
             }
 
-        })
-        plugin.thread.start()
+        }).start()
 
     }
 

@@ -7,19 +7,19 @@ import java.util.concurrent.ConcurrentHashMap
 
 class PlayerData(private val plugin:Man10Quest) {
 
-    val playerQuest = HashMap<Player,Data?>()
-    val finishQuest = ConcurrentHashMap<Player,MutableList<Data>>()
+    val playerQuest = HashMap<Player,Data?>()//プレイ中のクエスト
+    val finishQuest = ConcurrentHashMap<Player,MutableList<String>>()//クリアしたクエストのみ入っている
 
 
-    fun getFinishQuest(p:Player) : MutableList<Data>{
-        val list = mutableListOf<Data>()
+    fun getFinishQuest(p:Player) : MutableList<String>{
+        val list = mutableListOf<String>()
 
         val mysql = MySQLManager(plugin,"quest")
 
         val rs = mysql.query("SELECT * FROM finish_player WHERE uuid='${p.uniqueId}';")!!
 
         while (rs.next()){
-            list.add(plugin.questData.get(rs.getString("quest")))
+            list.add(rs.getString("quest"))
         }
         rs.close()
         mysql.close()
@@ -31,7 +31,7 @@ class PlayerData(private val plugin:Man10Quest) {
 
     fun isFinish(p: Player,quest :String): Boolean {
 
-        if (finishQuest[p]?.indexOf(plugin.questData.get(quest)) == -1)return false
+        if (!(finishQuest[p]?:return false).contains(quest))return false
 
         return true
 
@@ -44,7 +44,7 @@ class PlayerData(private val plugin:Man10Quest) {
         val data = finishQuest[p]?:return false
 
         for (d in quest.unlock){
-            if (data.indexOf(plugin.questData.get(d)) < 0){
+            if (data.indexOf(d) < 0){
                 return false
             }
         }
@@ -55,6 +55,11 @@ class PlayerData(private val plugin:Man10Quest) {
         val mysql = MySQLManager(plugin,"quest")
 
         mysql.execute("INSERT INTO finish_player VALUE('${player.name}','${player.uniqueId}','$name',now());")
+
+        val list = finishQuest[player]?: mutableListOf()
+        list.add(name)
+        finishQuest[player] = list
+
     }
 
     fun isPlay(player: Player): Boolean {
@@ -64,8 +69,14 @@ class PlayerData(private val plugin:Man10Quest) {
         return true
     }
     fun remove(player:Player, name:String){
+
+        val list = finishQuest[player]?:return
+        list.remove(name)
+        finishQuest[player] = list
+
         val mysql = MySQLManager(plugin,"quest")
 
         mysql.execute("DELETE FROM finish_player WHERE player='${player.name}'and quest='$name';")
+
     }
 }

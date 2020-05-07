@@ -39,15 +39,14 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
         if (e.view.title.indexOf("§e§lクエストタイプを選択") >=0){
 
             if(e.slot == 0){
-                plugin.questInventory.openHideQuest(1,p)
+                plugin.questInventory.openQuestType(1,p,true)
                 return
             }
-
 
             if (e.slot == 9 || e.slot == 17){
                 if (item.hasItemMeta()){ return }
 
-                plugin.questInventory.openQuestType(item.itemMeta.lore!![0].toInt(),p)
+                plugin.questInventory.openQuestType(item.itemMeta.lore!![0].toInt(),p,false)
                 return
             }
 
@@ -61,12 +60,12 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
         if (e.view.title.indexOf("§0§l裏クエスト") >=0){
 
             if(e.slot == 0){
-                plugin.questInventory.openQuestType(1,p)
+                plugin.questInventory.openQuestType(1,p,false)
                 return
             }
 
             if (e.slot == 9 || e.slot == 17){
-                plugin.questInventory.openHideQuest(item.itemMeta.lore!![0].toInt(),p)
+                plugin.questInventory.openQuestType(item.itemMeta.lore!![0].toInt(),p,true)
                 return
             }
 
@@ -83,7 +82,7 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
             }
 
             if (e.slot >= 45){
-                plugin.questInventory.openQuestType(1,p)
+                plugin.questInventory.openQuestType(1,p,false)
                 return
             }
 
@@ -109,7 +108,6 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
             p.sendMessage("§e§lクエストを中断しました")
             return
         }
-
     }
 
     @EventHandler
@@ -142,7 +140,6 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
                 Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, {
                     Bukkit.dispatchCommand(p,e.message.substring(1))
                 },100)
-
 
                 finish(p,data)
                 return
@@ -197,7 +194,6 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
         if (data.once){
             Thread(Runnable {
                 plugin.playerData.finish(p,data.name)
-                plugin.playerData.getFinishQuest(p)
             }).start()
         }
         plugin.playerData.playerQuest.remove(p)

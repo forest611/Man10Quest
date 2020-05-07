@@ -3,7 +3,6 @@ package red.man10.man10quest
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
@@ -15,76 +14,61 @@ class QuestInventory(private val plugin:Man10Quest) {
     /////////////////
     //クエストタイプ
     //////////////////
-    fun openQuestType(page:Int,p:Player){
-        val inv = Bukkit.createInventory(null,27,"§e§lクエストタイプを選択§m§a§n§1§0§Q§u§e§s§t")
+    fun openQuestType(page:Int,p:Player,isHide:Boolean){
+
+        val inv = if (isHide){
+            Bukkit.createInventory(null,27,"§0§l裏クエスト§m§a§n§1§0§Q§u§e§s§t")
+        }else{
+            Bukkit.createInventory(null,27,"§e§lクエストタイプを選択§m§a§n§1§0§Q§u§e§s§t")
+        }
 
         val next = ItemStack(Material.PAPER)
         val nMeta = next.itemMeta
-        nMeta.setDisplayName("§6§l次のページ")
+
+        if (isHide){ nMeta.setDisplayName( "§0§l次のページ") }else{
+            nMeta.setDisplayName("§6§l次のページ") }
+
         nMeta.lore = mutableListOf((page+1).toString())
         next.itemMeta = nMeta
 
         val previous = ItemStack(Material.PAPER)
         val pMeta = previous.itemMeta
-        pMeta.setDisplayName("§6§l前のページ")
+
+        if (isHide){ pMeta.setDisplayName("§0§l前のページ") }else{
+            pMeta.setDisplayName("§6§l前のページ") }
+
         pMeta.lore = mutableListOf((page-1).toString())
         previous.itemMeta = pMeta
 
-        if ((page*3)+1 <=plugin.questData.type.size){
+        if (isHide&&(page*3)+1 <=plugin.questData.hideType.size){
             inv.setItem(17,next)
-
         }
+
+        if (!isHide&&(page*3)+1 <=plugin.questData.type.size){
+            inv.setItem(17,next)
+        }
+
+
         if (page != 1){
             inv.setItem(9,previous)
         }
 
         try {
-            inv.setItem(11,makeItem(plugin.questData.type[(page*3)-3]))
-            inv.setItem(13,makeItem(plugin.questData.type[(page*3)-2]))
-            inv.setItem(15,makeItem(plugin.questData.type[(page*3)-1]))
+            if (isHide){
+                inv.setItem(11,makeItem(plugin.questData.hideType[(page*3)-3]))
+                inv.setItem(13,makeItem(plugin.questData.hideType[(page*3)-2]))
+                inv.setItem(15,makeItem(plugin.questData.hideType[(page*3)-1]))
+
+            }else{
+                inv.setItem(11,makeItem(plugin.questData.type[(page*3)-3]))
+                inv.setItem(13,makeItem(plugin.questData.type[(page*3)-2]))
+                inv.setItem(15,makeItem(plugin.questData.type[(page*3)-1]))
+            }
 
         }catch (e:IndexOutOfBoundsException){
         }
 
 
-        p.openInventory(inv)
-    }
-    ////////////////////
-    //裏クエスト
-    /////////////////////
-    fun openHideQuest(page: Int,p:Player){
-
-        val inv = Bukkit.createInventory(null,27,"§0§l裏クエスト§m§a§n§1§0§Q§u§e§s§t")
-
-        val next = ItemStack(Material.PAPER)
-        val nMeta = next.itemMeta
-        nMeta.setDisplayName( "§0§l次のページ")
-        nMeta.lore = mutableListOf((page+1).toString())
-        next.itemMeta = nMeta
-
-        val previous = ItemStack(Material.PAPER)
-        val pMeta = previous.itemMeta
-        pMeta.setDisplayName("§0§l前のページ")
-        pMeta.lore = mutableListOf((page-1).toString())
-        previous.itemMeta = pMeta
-
-        if ((page*3)+1 <=plugin.questData.hideType.size){
-            inv.setItem(17,next)
-
-        }
-        if (page != 1){
-            inv.setItem(9,previous)
-        }
-
-
-        try {
-            inv.setItem(11,makeItem(plugin.questData.hideType[(page*3)-3]))
-            inv.setItem(13,makeItem(plugin.questData.hideType[(page*3)-2]))
-            inv.setItem(15,makeItem(plugin.questData.hideType[(page*3)-1]))
-
-        }catch (e:IndexOutOfBoundsException){
-
-        }
         p.openInventory(inv)
     }
     ////////////////
@@ -95,10 +79,12 @@ class QuestInventory(private val plugin:Man10Quest) {
 
         Bukkit.getScheduler().runTask(plugin, Runnable {
 
-            val quest =plugin.questData.quest - plugin.playerData.finishQuest[player]!!.toMutableList()
+            val quest =plugin.questData.quest
 
             for (q in quest){
                 if (q.type != type){ continue }
+                if (plugin.playerData.finishQuest[player]!=null
+                        && plugin.playerData.finishQuest[player]!!.contains(q.name))continue
                 if (!plugin.playerData.isUnlock(player,q)){ continue }
 
                 inv.addItem(makeItem(q))
@@ -127,7 +113,7 @@ class QuestInventory(private val plugin:Man10Quest) {
 
         meta.setCustomModelData(data.damage)
 
-        val l = data.lore
+        meta.lore = data.lore
 
         meta.lore = data.lore
         meta.isUnbreakable = true

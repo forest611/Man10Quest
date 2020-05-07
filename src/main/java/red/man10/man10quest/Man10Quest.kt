@@ -2,13 +2,13 @@ package red.man10.man10quest
 
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
+import red.man10.man10drugplugin.MySQLManager
 
 class Man10Quest : JavaPlugin() {
 
     lateinit var questInventory : QuestInventory
     lateinit var questData : QuestData
     lateinit var playerData : PlayerData
-    lateinit var thread : Thread
     lateinit var event : QuestEvent
 
     var damage1 = 0
@@ -22,6 +22,8 @@ class Man10Quest : JavaPlugin() {
         damage2 = config.getInt("damage2")
 
         saveConfig()
+
+        createTable()
 
         questInventory = QuestInventory(this)
         questData = QuestData(this)
@@ -45,5 +47,20 @@ class Man10Quest : JavaPlugin() {
 
     override fun onDisable() {
         // Plugin shutdown logic
+    }
+
+    fun createTable(){
+
+        val mysql = MySQLManager(this,"quest")
+
+        mysql.execute("CREATE TABLE if not exists `finish_player` (\n" +
+                "\t`player` VARCHAR(20) NULL DEFAULT NULL,\n" +
+                "\t`uuid` VARCHAR(40) NULL DEFAULT NULL,\n" +
+                "\t`quest` TEXT NULL DEFAULT NULL,\n" +
+                "\t`date` DATE NULL\n" +
+                ");");
+        mysql.execute("CREATE TABLE if not exists `prize` (" +
+                "`quest` TEXT NULL DEFAULT NULL," +
+                "`prize` TEXT NULL DEFAULT NULL);");
     }
 }

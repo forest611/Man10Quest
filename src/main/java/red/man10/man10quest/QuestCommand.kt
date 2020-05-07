@@ -68,7 +68,7 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
                 plugin.questInventory.openQuest(sender)
                 return true
             }
-            plugin.questInventory.openQuestType(1,sender)
+            plugin.questInventory.openQuestType(1,sender,false)
             return true
         }
 
@@ -81,14 +81,13 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
             val p = Bukkit.getPlayer(args[1])?:return true
 
             if (!start){
-                p.sendMessage("§e§l現在クエストは受けられません")
+//                p.sendMessage("§e§l現在クエストは受けられません")
                 return true
             }
 
-            val data = plugin.playerData.playerQuest[p]
-            if (data == null ||
-                    data.name != args[2]){
-                p.sendMessage("§4§lあなたはクエストをやっていません！")
+            val data = plugin.playerData.playerQuest[p]?:return true
+            if (data.name != args[2]){
+//                p.sendMessage("§4§lあなたはクエストをやっていません！")
                 return true
             }
 
@@ -124,13 +123,13 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
                 val data = plugin.playerData.getFinishQuest(Bukkit.getPlayer(args[1])?:return@Runnable)
 
                 for (d in data){
-                    sender.sendMessage(d.title)
+                    sender.sendMessage(plugin.questData.get(d).title)
                 }
-
             })
             return true
         }
 
+        //クエストクリアの取り消し　remove player questname
         if (args[0] == "remove"){
 
             Bukkit.getScheduler().runTaskAsynchronously(plugin, Runnable {
@@ -218,6 +217,14 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
 
             return true
 
+        }
+
+        //報酬の確認
+        if (args[0] == "getprize"){
+            if (plugin.event.prize[args[1]] != null){
+                sender.inventory.addItem(plugin.event.prize[args[1]])
+            }
+            return true
         }
 
         return true
