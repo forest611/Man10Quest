@@ -118,7 +118,7 @@ class QuestEvent(private val plugin:Man10Quest) : Listener{
 
         val data = plugin.playerData.playerQuest[p]!!
 
-        if (data.msg.isEmpty() || data.msg.indexOf(e.message) <0){return}
+        if (data.msg.isEmpty() || !data.msg.contains(e.message)){return}
         finish(p,data)
     }
 
