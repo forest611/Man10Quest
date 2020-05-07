@@ -1,0 +1,13 @@
+name: sample_quest1
+title: サンプルクエスト1
+lore:
+    - 「おはまん」と入力するクエスト
+description: 「おはまん」とチャットに入力！
+material: GREEN_WOOL
+rank: GUEST
+finishMsg: おはまん！
+replicaTitle: おはまんのくえすと
+msg:
+    - おはまん
+    - ohaman
+    - ohamann

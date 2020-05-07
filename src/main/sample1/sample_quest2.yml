@@ -1,0 +1,11 @@
+name: sample_quest2
+title: サンプルクエスト2
+lore:
+    -  /lobbyコマンドを入力するクエスト
+description: /lobbyでロビーに移動！
+material: WHITE_WOOL
+rank: GUEST
+finishMsg: ここがロビーです！
+replicaTitle: ろびーにいくやーつ
+cmd:
+    - /lobby

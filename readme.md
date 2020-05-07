@@ -45,3 +45,5 @@
 - ``unlock`` 指定クエストクリアまでロック(list、指定クエストの``name``を入力)
 - ``daily`` デイリークエスト
 
+[configのサンプル](https://github.com/forest611/Man10Quest/tree/master/src/main/sample1)
+
