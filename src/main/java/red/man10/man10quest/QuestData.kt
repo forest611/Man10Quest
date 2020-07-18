@@ -1,10 +1,12 @@
 package red.man10.man10quest
 
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import java.io.File
@@ -50,6 +52,7 @@ class QuestData(private val plugin :Man10Quest) {
             type.customModelData = config.getInt("setting.customModelData",0)
             type.recRank = config.getString("setting.rank","§e§lGuest")!!
             type.number = config.getInt("setting.number",-1)
+            type.lock = config.getBoolean("setting.lock",false)
             type.file = f.name
 
             val lore = config.getStringList("setting.lore")
@@ -71,6 +74,7 @@ class QuestData(private val plugin :Man10Quest) {
                 quest.msg = config.getStringList("$name.msg" )
                 quest.cmd = config.getStringList("$name.cmd")
                 quest.once = config.getBoolean("$name.once",true)
+                quest.lock = config.getBoolean("$name.lock",false)
 
                 quest.prize = plugin.itemStackArrayFromBase64(config.getString("$name.prize")!!)
                 quest.delivery = plugin.itemStackArrayFromBase64(config.getString("$name.delivery")!!)
@@ -107,12 +111,20 @@ class QuestData(private val plugin :Man10Quest) {
         }
 
         GlobalScope.launch {
-            plugin.itemStackArrayToBase64(items.toTypedArray())
-
-            val yml = YamlConfiguration.loadConfiguration(File("${plugin.dataFolder}/${questMap[quest]!!.file}"))
-            yml.set("quest.prize",plugin.itemStackArrayToBase64(items.toTypedArray()))
 
         }
+
+        Thread(Runnable {
+            plugin.itemStackArrayToBase64(items.toTypedArray())
+
+            val file = File("${plugin.dataFolder}/${questMap[quest]!!.file}")
+
+            val yml = YamlConfiguration.loadConfiguration(file)
+            yml.set("quest.prize",plugin.itemStackArrayToBase64(items.toTypedArray()))
+
+            yml.save(file)
+
+        }).start()
 
         questMap[quest]!!.prize = items
 
@@ -132,17 +144,53 @@ class QuestData(private val plugin :Man10Quest) {
             items.add(item)
         }
 
-        GlobalScope.launch {
+        Thread(Runnable {
             plugin.itemStackArrayToBase64(items.toTypedArray())
 
-            val yml = YamlConfiguration.loadConfiguration(File("${plugin.dataFolder}/${questMap[quest]!!.file}"))
+            val file = File("${plugin.dataFolder}/${questMap[quest]!!.file}")
+
+            val yml = YamlConfiguration.loadConfiguration(file)
             yml.set("quest.deliver",plugin.itemStackArrayToBase64(items.toTypedArray()))
-        }
+
+            yml.save(file)
+
+        }).start()
 
         questMap[quest]!!.delivery = items
 
     }
 
+    fun checkDelivery(p:Player,name:String,take:Boolean):Boolean{
+        val quest=  questMap[name]?:return false
+
+        var bool = false
+
+        val inv = p.inventory
+
+        for (item in quest.delivery){
+
+            if (item.type == Material.AIR)continue
+
+            for (i in inv){
+
+                if (i.type == Material.AIR)continue
+
+                if (item.toString() == i.toString()){
+
+                    if (take){
+                        inv.removeItem(i)
+                    }
+
+                    bool = true
+                    break
+                }
+                bool = false
+            }
+
+        }
+
+        return bool
+    }
 
 }
 class Quest{
@@ -160,6 +208,8 @@ class Quest{
     var file = ""
     var prize = mutableListOf<ItemStack>()
     var delivery = mutableListOf<ItemStack>()
+
+    var lock = false
 }
 
 //クエストの
@@ -174,6 +224,8 @@ class QuestType{
     var hide = false
     var number = 0//表示順
     var file = ""
+
+    var lock = false//デフォルトでロックをかけるか
 
     var quests = mutableListOf<String>()
 }

@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap
 
 class PlayerData(private val plugin:Man10Quest) {
 
-    val playerQuest = HashMap<Player,Quest?>()//プレイ中のクエスト
+    val playerQuest = HashMap<Player,String?>()//プレイ中のクエスト
     val playerData = ConcurrentHashMap<Player,HashMap<String,QuestStatus>>()
 
     //起動時にクエストのクリア状況等を読み込む
@@ -40,10 +40,12 @@ class PlayerData(private val plugin:Man10Quest) {
 
     fun create(p:Player){
 
-        for (quest in Man10Quest.quest.questMap.keys()){
+        for (quest in Man10Quest.quest.questMap){
+
+            val status = if (quest.value.lock) "lock" else "unlock"
 
             MySQLManager.executeQueue("INSERT INTO player_quest_data (player, uuid, quest_name, status) " +
-                    "VALUES ('${p.name}', '${p.uniqueId}', '$quest', 'lock');")
+                    "VALUES ('${p.name}', '${p.uniqueId}', '${quest.key}', '$status');")
 
         }
         Bukkit.getLogger().info("${p.name}のクエストデータを生成")
@@ -57,6 +59,12 @@ class PlayerData(private val plugin:Man10Quest) {
 
         playerQuest[p] = null
         setStatus(p,name,QuestStatus.CLEAR)
+    }
+
+    fun start(p:Player,quest: String){
+
+        playerQuest[p] = quest
+
     }
 
     fun setStatus(p:Player,quest:String,status:QuestStatus){

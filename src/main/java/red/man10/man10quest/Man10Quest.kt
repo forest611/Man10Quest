@@ -15,6 +15,8 @@ class Man10Quest : JavaPlugin() {
     companion object{
         lateinit var quest : QuestData
         lateinit var playerData : PlayerData
+
+        lateinit var inv : QuestInventory
     }
 
 
@@ -25,11 +27,13 @@ class Man10Quest : JavaPlugin() {
         saveConfig()
 
         getCommand("mq")!!.setExecutor(QuestCommand(this))
+        server.pluginManager.registerEvents(QuestEvent(this),this)
 
         MySQLManager.setupBlockingQueue(this,"Man10Quest")
 
         quest = QuestData(this)
         playerData = PlayerData(this)
+        inv = QuestInventory(this)
 
     }
 

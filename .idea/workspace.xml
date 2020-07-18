@@ -6,14 +6,14 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5b6d0a24-8dd8-4f45-9090-bcdb361f00d2" name="Default Changelist" comment="報酬、納品の保存処理追加">
+    <list default="true" id="5b6d0a24-8dd8-4f45-9090-bcdb361f00d2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/Man10Quest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/Man10Quest.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/PlayerData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/PlayerData.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestCommand.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestCommand.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestData.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestEvent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestEvent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestInventory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestInventory.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +111,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595040457174</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="報酬、納品の保存処理追加">
+      <created>1595045158413</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1595045158413</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -122,7 +129,8 @@
     <MESSAGE value="サンプルテキストの追加&#10;readme修正" />
     <MESSAGE value="テーブルクエリ追加&#10;config読み込み処理追加" />
     <MESSAGE value="プレイヤーデータの読み込み処理など追加" />
-    <option name="LAST_COMMIT_MESSAGE" value="プレイヤーデータの読み込み処理など追加" />
+    <MESSAGE value="報酬、納品の保存処理追加" />
+    <option name="LAST_COMMIT_MESSAGE" value="報酬、納品の保存処理追加" />
   </component>
   <component name="WindowStateProjectService">
     <state x="512" y="169" key="#Project_Structure" timestamp="1588690860761">
@@ -137,11 +145,11 @@
       <screen x="0" y="23" width="2048" height="1129" />
     </state>
     <state x="762" y="341" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588691866112" />
-    <state x="651" y="181" key="CommitChangelistDialog2" timestamp="1595045036403">
+    <state x="651" y="181" key="CommitChangelistDialog2" timestamp="1595045158293">
       <screen x="0" y="23" width="2304" height="1273" />
     </state>
     <state x="579" y="163" key="CommitChangelistDialog2/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588857016754" />
-    <state x="651" y="181" key="CommitChangelistDialog2/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595045036403" />
+    <state x="651" y="181" key="CommitChangelistDialog2/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595045158293" />
     <state x="100" y="123" width="1848" height="929" key="DiffContextDialog" timestamp="1588851486606">
       <screen x="0" y="23" width="2048" height="1129" />
     </state>
@@ -150,10 +158,11 @@
       <screen x="0" y="23" width="2048" height="1129" />
     </state>
     <state x="512" y="169" key="SettingsEditor/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588852292040" />
-    <state x="624" y="327" key="Vcs.Push.Dialog.v2" timestamp="1588857032933">
-      <screen x="0" y="23" width="2048" height="1129" />
+    <state x="702" y="366" key="Vcs.Push.Dialog.v2" timestamp="1595045160535">
+      <screen x="0" y="23" width="2304" height="1273" />
     </state>
     <state x="624" y="327" key="Vcs.Push.Dialog.v2/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588857032933" />
+    <state x="702" y="366" key="Vcs.Push.Dialog.v2/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595045160535" />
     <state x="775" y="308" width="754" height="763" key="search.everywhere.popup" timestamp="1595044186504">
       <screen x="0" y="23" width="2304" height="1273" />
     </state>

@@ -1,13 +1,40 @@
-name: sample_quest1
-title: サンプルクエスト1
-lore:
-    - 「おはまん」と入力するクエスト
-description: 「おはまん」とチャットに入力！
-material: GREEN_WOOL
-rank: GUEST
-finishMsg: おはまん！
-replicaTitle: おはまんのくえすと
-msg:
-    - おはまん
-    - ohaman
-    - ohamann
+setting:
+    name: QuestName #クエストの識別名
+    title: サンプルクエスト #クエストのタイトル、名前
+    lore:  #クエストの説明、lore
+        - 説明 
+    material: STONE #アイテムのタイプ
+    customModelData: 1 #customModelData
+    rank: Guest #推奨ランク(表示のみ)
+    number: 1 #/mqで出てきたクエスト一覧の表示順
+    lock: false #最初はロックされた状態にするかどうか(解禁コマンドを打つことでクエスト一覧に表示される)
+quest1: #"quest1"という名前は、識別名にもなるので、重複しないように
+    title: サンプルクエスト1
+    lore: 
+        - 説明
+    description: /warp man10　コマンドを打ってみよう！ #クエスト開始時に表示される説明
+    material: STONE
+    customModelData: 1
+    rank: Guest
+    finishMsg: クリア時のメッセージ
+    msg: #指定メッセージ入力でクリア(トリガー)
+        - msg1
+    cmd: #指定コマンド入力でクリア(トリガー)
+        - cmd1
+    once: false #一度プレイしたらもうできなくなる
+    lock: false 
+quest2: 
+    title: サンプルクエスト1
+    lore: 
+        - 説明
+    description: /warp man10　コマンドを打ってみよう！ #クエスト開始時に表示される説明
+    material: STONE
+    customModelData: 1
+    rank: Guest
+    finishMsg: クリア時のメッセージ
+    msg: #指定メッセージ入力でクリア(トリガー)
+        - msg1
+    cmd: #指定コマンド入力でクリア(トリガー)
+        - cmd1
+    once: false #一度プレイしたらもうできなくなる
+    lock: false 
