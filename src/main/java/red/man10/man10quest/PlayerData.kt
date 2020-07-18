@@ -1,65 +1,75 @@
 package red.man10.man10quest
 
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import red.man10.man10drugplugin.MySQLManager
 import java.util.concurrent.ConcurrentHashMap
 
 
 class PlayerData(private val plugin:Man10Quest) {
 
-    val playerQuest = HashMap<Player,Data?>()//プレイ中のクエスト
-    val finishQuest = ConcurrentHashMap<Player,MutableList<String>>()//クリアしたクエストのみ入っている
+    val playerQuest = HashMap<Player,Quest?>()//プレイ中のクエスト
+    val playerData = ConcurrentHashMap<Player,HashMap<String,QuestStatus>>()
 
-
-    fun getFinishQuest(p:Player) : MutableList<String>{
-        val list = mutableListOf<String>()
+    //起動時にクエストのクリア状況等を読み込む
+    fun load(p:Player) : HashMap<String,QuestStatus>{
+        val map = HashMap<String,QuestStatus>()
 
         val mysql = MySQLManager(plugin,"quest")
 
-        val rs = mysql.query("SELECT * FROM finish_player WHERE uuid='${p.uniqueId}';")!!
+        val rs = mysql.query("SELECT status,quest FROM player_quest_data WHERE uuid='${p.uniqueId}';")!!
 
-        while (rs.next()){
-            list.add(rs.getString("quest"))
+       while (rs.next()){
+
+            val quest = rs.getString("quest")
+
+            map[quest] = when(rs.getString("status")){
+                "lock" -> QuestStatus.LOCK
+                "unlock" -> QuestStatus.UNLOCK
+                "clear" -> QuestStatus.CLEAR
+                else -> QuestStatus.ERROR
+            }
+
         }
         rs.close()
         mysql.close()
 
-        finishQuest[p] = list
+        playerData[p] = map
 
-        return list
+        return map
     }
 
-    fun isFinish(p: Player,quest :String): Boolean {
+    fun create(p:Player){
 
-        if (!(finishQuest[p]?:return false).contains(quest))return false
+        for (quest in Man10Quest.quest.quest.keys()){
 
-        return true
+            MySQLManager.executeQueue("INSERT INTO player_quest_data (player, uuid, quest_name, status) " +
+                    "VALUES ('${p.name}', '${p.uniqueId}', '$quest', 'lock');")
 
-    }
-
-    fun isUnlock(p:Player,quest:Data): Boolean{
-
-        if (quest.unlock.isEmpty())return true
-
-        val data = finishQuest[p]?:return false
-
-        for (d in quest.unlock){
-            if (data.indexOf(d) < 0){
-                return false
-            }
         }
-        return true
+        Bukkit.getLogger().info("${p.name}のクエストデータを生成")
     }
 
-    fun finish(player:Player,name:String){
-        val mysql = MySQLManager(plugin,"quest")
+    fun get(p:Player,quest:String):QuestStatus{
+        return playerData[p]?.get(quest)?:return QuestStatus.ERROR
+    }
 
-        mysql.execute("INSERT INTO finish_player VALUE('${player.name}','${player.uniqueId}','$name',now());")
+    fun finish(p:Player,name:String){
 
-        val list = finishQuest[player]?: mutableListOf()
-        list.add(name)
-        finishQuest[player] = list
+        playerQuest[p] = null
+        setStatus(p,name,QuestStatus.CLEAR)
+    }
 
+    fun setStatus(p:Player,quest:String,status:QuestStatus){
+
+        val statusString = when(status){
+            QuestStatus.LOCK-> "lock"
+            QuestStatus.UNLOCK-> "unlock"
+            QuestStatus.CLEAR-> "clear"
+            else -> "lock"
+        }
+
+        MySQLManager.executeQueue("UPDATE player_quest_data SET status = '$statusString' " +
+                "WHERE uuid = '${p.uniqueId}' AND quest_name='$quest';")
     }
 
     fun isPlay(player: Player): Boolean {
@@ -68,15 +78,13 @@ class PlayerData(private val plugin:Man10Quest) {
         }
         return true
     }
-    fun remove(player:Player, name:String){
 
-        val list = finishQuest[player]?:return
-        list.remove(name)
-        finishQuest[player] = list
+}
+enum class QuestStatus{
 
-        val mysql = MySQLManager(plugin,"quest")
+    LOCK,
+    UNLOCK,
+    CLEAR,
+    ERROR
 
-        mysql.execute("DELETE FROM finish_player WHERE player='${player.name}'and quest='$name';")
-
-    }
 }

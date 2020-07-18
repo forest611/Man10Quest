@@ -1,12 +1,11 @@
-package red.man10.man10drugplugin
+package red.man10.man10quest
 
-import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
-
 import java.sql.Connection
 import java.sql.ResultSet
 import java.sql.SQLException
 import java.sql.Statement
+import java.util.concurrent.LinkedBlockingQueue
 import java.util.logging.Level
 
 /**
@@ -27,6 +26,7 @@ class MySQLManager(private val plugin: JavaPlugin, private val conName: String) 
     private var con: Connection? = null
     private var MySQL: MySQLFunc? = null
 
+
     init {
         this.connected = false
         loadConfig()
@@ -43,13 +43,13 @@ class MySQLManager(private val plugin: JavaPlugin, private val conName: String) 
     /////////////////////////////////
     fun loadConfig() {
         //   plugin.getLogger().info("MYSQL Config loading");
-        plugin.reloadConfig()
-        HOST = plugin.config.getString("mysql.host")
-        USER = plugin.config.getString("mysql.user")
-        PASS = plugin.config.getString("mysql.pass")
-        PORT = plugin.config.getString("mysql.port")
-        DB = plugin.config.getString("mysql.db")
-        plugin.getLogger().info("Config loaded  ${HOST} / ${USER}")
+        val config = plugin.config
+        HOST = config.getString("MySQL.Host")
+        USER = config.getString("MySQL.User")
+        PASS = config.getString("MySQL.Password")
+        PORT = config.getString("MySQL.Port")
+        DB = config.getString("MySQL.Database")
+        plugin.logger.info("Config loaded  $HOST / $USER")
 
     }
 
@@ -73,7 +73,7 @@ class MySQLManager(private val plugin: JavaPlugin, private val conName: String) 
         this.MySQL = MySQLFunc(host!!, db!!, user!!, pass!!, port!!)
         this.con = this.MySQL?.open()
         if (this.con == null) {
-            Bukkit.getLogger().info("failed to open MYSQL")
+            plugin.logger.info("failed to open MYSQL")
             return false
         }
 
@@ -102,7 +102,7 @@ class MySQLManager(private val plugin: JavaPlugin, private val conName: String) 
                 ++count
             }
         } catch (var5: SQLException) {
-            Bukkit.getLogger().log(Level.SEVERE, "Could not select all rows from table: " + table + ", error: " + var5.errorCode)
+            plugin.logger.log(Level.SEVERE, "Could not select all rows from table: " + table + ", error: " + var5.errorCode)
         }
 
         return count
@@ -119,7 +119,7 @@ class MySQLManager(private val plugin: JavaPlugin, private val conName: String) 
             ret = set!!.getInt("count(*)")
 
         } catch (var5: SQLException) {
-            Bukkit.getLogger().log(Level.SEVERE, "Could not select all rows from table: " + table + ", error: " + var5.errorCode)
+            plugin.logger.log(Level.SEVERE, "Could not select all rows from table: " + table + ", error: " + var5.errorCode)
             return -1
         }
 
@@ -133,7 +133,7 @@ class MySQLManager(private val plugin: JavaPlugin, private val conName: String) 
         this.MySQL = MySQLFunc(this.HOST!!, this.DB!!, this.USER!!, this.PASS!!, this.PORT!!)
         this.con = this.MySQL!!.open()
         if (this.con == null) {
-            Bukkit.getLogger().info("failed to open MYSQL")
+            plugin.logger.info("failed to open MYSQL")
             return false
         }
         var ret = true
@@ -163,7 +163,7 @@ class MySQLManager(private val plugin: JavaPlugin, private val conName: String) 
         this.con = this.MySQL!!.open()
         var rs: ResultSet? = null
         if (this.con == null) {
-            Bukkit.getLogger().info("failed to open MYSQL")
+            plugin.logger.info("failed to open MYSQL")
             return rs
         }
 
@@ -193,6 +193,35 @@ class MySQLManager(private val plugin: JavaPlugin, private val conName: String) 
             this.MySQL?.close(this.con)
 
         } catch (var4: SQLException) {
+        }
+
+    }
+
+    companion object{
+
+        private val blockingQueue = LinkedBlockingQueue<String>()
+
+        /////////////////////////////////////
+        //   BlockingQueueのセットアップ
+        /////////////////////////////////////
+        fun setupBlockingQueue(plugin: JavaPlugin,conName: String){
+
+            Thread(Runnable {
+                val sql = MySQLManager(plugin,conName)
+                try{
+                    while (true){
+                        val take = blockingQueue.take()
+                        sql.execute(take)
+                    }
+                }catch (e:InterruptedException){
+
+                }
+            }).start()
+        }
+
+        //キューにクエリを入れる
+        fun executeQueue(query:String){
+            blockingQueue.add(query)
         }
 
     }

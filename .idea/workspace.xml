@@ -7,11 +7,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5b6d0a24-8dd8-4f45-9090-bcdb361f00d2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/db/db.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/Man10Quest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/Man10Quest.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestData.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/config.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/config.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/MySQLFunc.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/MySQLFunc.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/MySQLManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/MySQLManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/PlayerData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/PlayerData.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestInventory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestInventory.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +53,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/red/man10/man10quest" />
       <recent name="$PROJECT_DIR$/src/main" />
     </key>
   </component>
@@ -94,7 +96,14 @@
       <option name="project" value="LOCAL" />
       <updated>1588857017232</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="テーブルクエリ追加&#10;config読み込み処理追加">
+      <created>1594660566729</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1594660566729</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -103,7 +112,8 @@
     <MESSAGE value="コードの整理&#10;報酬確認コマンド追加" />
     <MESSAGE value="ちょっと修正&#10;readme追加" />
     <MESSAGE value="サンプルテキストの追加&#10;readme修正" />
-    <option name="LAST_COMMIT_MESSAGE" value="サンプルテキストの追加&#10;readme修正" />
+    <MESSAGE value="テーブルクエリ追加&#10;config読み込み処理追加" />
+    <option name="LAST_COMMIT_MESSAGE" value="テーブルクエリ追加&#10;config読み込み処理追加" />
   </component>
   <component name="WindowStateProjectService">
     <state x="512" y="169" key="#Project_Structure" timestamp="1588690860761">
@@ -118,10 +128,11 @@
       <screen x="0" y="23" width="2048" height="1129" />
     </state>
     <state x="762" y="341" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588691866112" />
-    <state x="579" y="163" key="CommitChangelistDialog2" timestamp="1588857016754">
-      <screen x="0" y="23" width="2048" height="1129" />
+    <state x="651" y="181" key="CommitChangelistDialog2" timestamp="1594660566598">
+      <screen x="0" y="23" width="2304" height="1273" />
     </state>
     <state x="579" y="163" key="CommitChangelistDialog2/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588857016754" />
+    <state x="651" y="181" key="CommitChangelistDialog2/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1594660566598" />
     <state x="100" y="123" width="1848" height="929" key="DiffContextDialog" timestamp="1588851486606">
       <screen x="0" y="23" width="2048" height="1129" />
     </state>

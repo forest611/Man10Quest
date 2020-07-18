@@ -1,6 +1,5 @@
-package red.man10.man10drugplugin
+package red.man10.man10quest
 
-import org.bukkit.Bukkit
 
 import java.sql.Connection
 import java.sql.DriverManager
@@ -33,7 +32,8 @@ class MySQLFunc(host: String, db: String, user: String, pass: String, port: Stri
             this.con = DriverManager.getConnection("jdbc:mysql://" + this.HOST + ":" + this.PORT + "/" + this.DB + "?useSSL=false", this.USER, this.PASS)
             return this.con
         } catch (e:Exception) {
-            Bukkit.getLogger().log(Level.SEVERE, "Could not connect to MySQL server, error message: ${e.message}")
+//            Bukkit.getLogger().log(Level.SEVERE, "Could not connect to MySQL server, error message: ${e.message}")
+
         }
 
 
