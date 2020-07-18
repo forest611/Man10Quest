@@ -1,85 +1,87 @@
 package red.man10.man10quest
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.ItemStack
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.collections.HashMap
 
 
 class QuestData(private val plugin :Man10Quest) {
 
-    val quest = ConcurrentHashMap<String,Quest>()
+    val questMap = ConcurrentHashMap<String,Quest>()
     var questType = ConcurrentHashMap<String,QuestType>()
 
 
     fun loadQuest(){
-        quest.clear()
+        questMap.clear()
         questType.clear()
 
         Bukkit.getLogger().info("Loading files....")
 
-         val folder = File(Bukkit.getServer().pluginManager.getPlugin("Man10Quest")!!.dataFolder,File.separator)
+         val folder = File(plugin.dataFolder,File.separator)
 
         if (!folder.exists()){
             return
         }
 
-        val file = folder.listFiles()?.toMutableList()?:return
+        val files = folder.listFiles()?.toMutableList()?:return
 
-        for (f in file){
+        for (f in files){
             if (f.isFile){
                 continue
             }
-            val files = f.listFiles()?:return
 
-            val config = YamlConfiguration.loadConfiguration(files[f.list()?.indexOf("setting.yml")?:return])
+            val config = YamlConfiguration.loadConfiguration(f)
+
+            val names = config.getKeys(false)
+
+            val quests = mutableListOf<String>()
 
             val type = QuestType()
 
-            Bukkit.getLogger().info("Loading setting.yml")
+            type.name = config.getString("setting.name","quest")!!
+            type.title = config.getString("setting.title","クエスト1")!!
+            type.material = Material.valueOf(config.getString("setting.material","STONE")!!)
+            type.customModelData = config.getInt("setting.customModelData",0)
+            type.recRank = config.getString("setting.rank","§e§lGuest")!!
+            type.number = config.getInt("setting.number",-1)
+            type.file = f.name
 
-            type.name = config.getString("name","quest")!!
-            type.title = config.getString("title","クエスト1")!!
-            type.material = Material.valueOf(config.getString("material","STONE")!!)
-            type.customModelData = config.getInt("customModelData",0)
-            type.recRank = config.getString("rank","§e§lGuest")!!
-            type.number = config.getInt("number",-1)
-
-            var lore = config.getStringList("lore")
+            val lore = config.getStringList("setting.lore")
             lore.add("§a§l推奨ランク:${type.recRank}§a§l以上")
             type.lore = lore
 
-            val dataFile = YamlConfiguration.loadConfiguration(files[f.list()?.indexOf("quest.yml")?:return])
-
-            val names = dataFile.getKeys(false)
-
-            val quests = mutableListOf<Quest>()
-
             for (name in names){
 
-                val quest1 = Quest()
+                val quest = Quest()
 
-                quest1.name = name
-                quest1.title = dataFile.getString("$name.title","クエスト1")!!
-                quest1.description = dataFile.getString("$name.description","none")!!
-                quest1.material = Material.valueOf(dataFile.getString("$name.material","STONE")!!)
-                quest1.customModelData = dataFile.getInt("$name.customModelData",0)
-                quest1.recRank = dataFile.getString("$name.rank","§e§lGuest")!!
-                quest1.finishMessage = dataFile.getString("$name.finishMsg","none")!!
-                quest1.msg = dataFile.getStringList("$name.msg" )
-                quest1.cmd = dataFile.getStringList("$name.cmd")
-                quest1.once = dataFile.getBoolean("$name.once",true)
+                quest.name = name
+                quest.file = f.name
+                quest.title = config.getString("$name.title","クエスト1")!!
+                quest.description = config.getString("$name.description","none")!!
+                quest.material = Material.valueOf(config.getString("$name.material","STONE")!!)
+                quest.customModelData = config.getInt("$name.customModelData",0)
+                quest.recRank = config.getString("$name.rank","§e§lGuest")!!
+                quest.finishMessage = config.getString("$name.finishMsg","none")!!
+                quest.msg = config.getStringList("$name.msg" )
+                quest.cmd = config.getStringList("$name.cmd")
+                quest.once = config.getBoolean("$name.once",true)
 
-                lore = dataFile.getStringList("lore")
+                quest.prize = plugin.itemStackArrayFromBase64(config.getString("$name.prize")!!)
+                quest.delivery = plugin.itemStackArrayFromBase64(config.getString("$name.delivery")!!)
 
-                //TODO:報酬が設定されていないときの処理
+                val lore2 = config.getStringList("lore")
 
-                lore.add("§a§l推奨ランク:${quest1.recRank}§a§l以上")
-                quest1.lore = lore
+                lore2.add("§a§l推奨ランク:${quest.recRank}§a§l以上")
+                quest.lore = lore2
 
-                quests.add(quest1)
+                quests.add(quest.name)
+                questMap[quest.name] = quest
             }
 
             type.quests = quests
@@ -91,7 +93,55 @@ class QuestData(private val plugin :Man10Quest) {
         }
     }
 
+    fun setPrize(quest:String,inv: Inventory){
 
+        val items = mutableListOf<ItemStack>()
+
+        for (i in 0..26){
+            val item = inv.getItem(i)
+            if (item == null || item.type == Material.AIR){
+                items.add(ItemStack(Material.AIR))
+                continue
+            }
+            items.add(item)
+        }
+
+        GlobalScope.launch {
+            plugin.itemStackArrayToBase64(items.toTypedArray())
+
+            val yml = YamlConfiguration.loadConfiguration(File("${plugin.dataFolder}/${questMap[quest]!!.file}"))
+            yml.set("quest.prize",plugin.itemStackArrayToBase64(items.toTypedArray()))
+
+        }
+
+        questMap[quest]!!.prize = items
+
+    }
+
+    //納品アイテム
+    fun setDelivery(quest:String,inv: Inventory){
+
+        val items = mutableListOf<ItemStack>()
+
+        for (i in 0..26){
+            val item = inv.getItem(i)
+            if (item == null || item.type == Material.AIR){
+                items.add(ItemStack(Material.AIR))
+                continue
+            }
+            items.add(item)
+        }
+
+        GlobalScope.launch {
+            plugin.itemStackArrayToBase64(items.toTypedArray())
+
+            val yml = YamlConfiguration.loadConfiguration(File("${plugin.dataFolder}/${questMap[quest]!!.file}"))
+            yml.set("quest.deliver",plugin.itemStackArrayToBase64(items.toTypedArray()))
+        }
+
+        questMap[quest]!!.delivery = items
+
+    }
 
 
 }
@@ -107,6 +157,9 @@ class Quest{
     var msg = mutableListOf<String>() //クリアのトリガーとなるメッセージ
     var cmd = mutableListOf<String>() //クリアのトリガーとなるコマンド(指定コマンド実行でクリア)
     var once = true
+    var file = ""
+    var prize = mutableListOf<ItemStack>()
+    var delivery = mutableListOf<ItemStack>()
 }
 
 //クエストの
@@ -120,6 +173,7 @@ class QuestType{
     var customModelData = 0
     var hide = false
     var number = 0//表示順
+    var file = ""
 
-    var quests = mutableListOf<Quest>()
+    var quests = mutableListOf<String>()
 }

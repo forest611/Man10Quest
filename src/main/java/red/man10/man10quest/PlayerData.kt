@@ -40,7 +40,7 @@ class PlayerData(private val plugin:Man10Quest) {
 
     fun create(p:Player){
 
-        for (quest in Man10Quest.quest.quest.keys()){
+        for (quest in Man10Quest.quest.questMap.keys()){
 
             MySQLManager.executeQueue("INSERT INTO player_quest_data (player, uuid, quest_name, status) " +
                     "VALUES ('${p.name}', '${p.uniqueId}', '$quest', 'lock');")
