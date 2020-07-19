@@ -1,5 +1,7 @@
 package red.man10.man10quest
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.command.Command
@@ -12,6 +14,7 @@ import org.bukkit.inventory.ItemStack
 import red.man10.man10quest.Man10Quest.Companion.inv
 import red.man10.man10quest.Man10Quest.Companion.playerData
 import red.man10.man10quest.Man10Quest.Companion.quest
+import red.man10.man10quest.Man10Quest.Companion.start
 
 class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
 
@@ -107,6 +110,40 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
                     }
 
                 }
+
+            }
+
+            "on"->{
+                start = true
+                sender.sendMessage("§a§lプラグインをONにしました")
+                return true
+            }
+
+            "off"->{
+                start = false
+                sender.sendMessage("§a§lプラグインをOFFにしました")
+                return true
+            }
+
+            "reload"->{
+
+                GlobalScope.launch {
+                    sender.sendMessage("§a§lリロード開始")
+
+                    quest.loadQuest()
+
+                    for (p in Bukkit.getOnlinePlayers()){
+                        playerData.load(p)
+                    }
+
+                    sender.sendMessage("§a§lリロード完了！")
+                }
+
+            }
+
+            "finish" ->{//mq finish <quest> <player>
+
+                playerData.finish(Bukkit.getPlayer(args[2])!!,args[1])
 
             }
 

@@ -17,6 +17,8 @@ class Man10Quest : JavaPlugin() {
         lateinit var playerData : PlayerData
 
         lateinit var inv : QuestInventory
+
+        var start = true
     }
 
 
