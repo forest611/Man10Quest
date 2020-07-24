@@ -81,10 +81,15 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
                         val p = Bukkit.getPlayer(args[3])?:return false
 
                         if (args.size == 4){
-                            quest.checkDelivery(p,args[2],false)
+                            if (quest.checkDelivery(p,args[2],false)){
+                                playerData.finish(p,args[2])
+                            }
                             return true
                         }
-                        quest.checkDelivery(p,args[2],args[4].toBoolean())
+                        if (quest.checkDelivery(p,args[2],args[4].toBoolean())){
+                            playerData.finish(p,args[2])
+                        }
+
 
                     }
 

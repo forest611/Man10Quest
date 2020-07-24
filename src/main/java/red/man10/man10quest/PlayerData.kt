@@ -94,6 +94,7 @@ class PlayerData(private val plugin:Man10Quest) {
 
     fun interruption(p: Player){
         playerQuest[p] = null
+        p.sendMessage("§c§lクエストを中断しました！")
     }
 
     fun start(p:Player, name: String){

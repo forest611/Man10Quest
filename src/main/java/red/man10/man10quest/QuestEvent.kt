@@ -44,8 +44,19 @@ class QuestEvent(private val plugin:Man10Quest) : Listener {
                 Man10Quest.playerData.start(p,item.itemMeta.persistentDataContainer[NamespacedKey(plugin,"name"), PersistentDataType.STRING]?:return)
 
                 p.closeInventory()
+                return
             }
 
+        }
+
+        if (e.view.title.indexOf("§a§lクエスト：") == 0){
+            e.isCancelled = true
+
+            if (e.slot == 6){
+                Man10Quest.playerData.interruption(p)
+                p.closeInventory()
+                return
+            }
         }
 
     }

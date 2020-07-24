@@ -131,7 +131,7 @@ class QuestData(private val plugin :Man10Quest) {
             val file = File("${plugin.dataFolder}/${questMap[quest]!!.file}")
 
             val yml = YamlConfiguration.loadConfiguration(file)
-            yml.set("quest.prize",plugin.itemStackArrayToBase64(items.toTypedArray()))
+            yml.set("$quest.prize",plugin.itemStackArrayToBase64(items.toTypedArray()))
 
             yml.save(file)
 
@@ -161,7 +161,7 @@ class QuestData(private val plugin :Man10Quest) {
             val file = File("${plugin.dataFolder}/${questMap[quest]!!.file}")
 
             val yml = YamlConfiguration.loadConfiguration(file)
-            yml.set("quest.deliver",plugin.itemStackArrayToBase64(items.toTypedArray()))
+            yml.set("$quest.deliver",plugin.itemStackArrayToBase64(items.toTypedArray()))
 
             yml.save(file)
 
@@ -174,6 +174,8 @@ class QuestData(private val plugin :Man10Quest) {
     fun checkDelivery(p:Player,name:String,take:Boolean):Boolean{
         val quest=  questMap[name]?:return false
 
+        if (Man10Quest.playerData.getPlayingQuest(p) != name)return false
+
         var bool = false
 
         val inv = p.inventory
@@ -184,7 +186,7 @@ class QuestData(private val plugin :Man10Quest) {
 
             for (i in inv){
 
-                if (i.type == Material.AIR)continue
+                if (i == null || i.type == Material.AIR)continue
 
                 if (item.toString() == i.toString()){
 
