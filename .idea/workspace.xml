@@ -8,9 +8,14 @@
   <component name="ChangeListManager">
     <list default="true" id="5b6d0a24-8dd8-4f45-9090-bcdb361f00d2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/Man10Quest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/Man10Quest.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/PlayerData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/PlayerData.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestCommand.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestCommand.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestData.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestEvent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestEvent.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestInventory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestInventory.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/sample1/sample_quest1.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/sample1/sample_quest.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/sample1/sample_quest2.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/sample1/setting.yml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,7 +127,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595067141592</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="DB処理修正&#10;コマンド追加">
+      <created>1595161697201</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1595161697201</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -135,7 +147,8 @@
     <MESSAGE value="プレイヤーデータの読み込み処理など追加" />
     <MESSAGE value="報酬、納品の保存処理追加" />
     <MESSAGE value="コマンドなど追加" />
-    <option name="LAST_COMMIT_MESSAGE" value="コマンドなど追加" />
+    <MESSAGE value="DB処理修正&#10;コマンド追加" />
+    <option name="LAST_COMMIT_MESSAGE" value="DB処理修正&#10;コマンド追加" />
   </component>
   <component name="WindowStateProjectService">
     <state x="512" y="169" key="#Project_Structure" timestamp="1588690860761">
@@ -146,15 +159,19 @@
       <screen x="0" y="23" width="2048" height="1129" />
     </state>
     <state x="812" y="310" key="#com.intellij.ide.util.MemberChooser/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588692170654" />
+    <state x="840" y="402" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1595496331306">
+      <screen x="0" y="23" width="2304" height="1273" />
+    </state>
+    <state x="840" y="402" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595496331306" />
     <state x="762" y="341" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1588691866112">
       <screen x="0" y="23" width="2048" height="1129" />
     </state>
     <state x="762" y="341" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588691866112" />
-    <state x="651" y="181" key="CommitChangelistDialog2" timestamp="1595067141480">
+    <state x="651" y="181" key="CommitChangelistDialog2" timestamp="1595161697052">
       <screen x="0" y="23" width="2304" height="1273" />
     </state>
     <state x="579" y="163" key="CommitChangelistDialog2/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588857016754" />
-    <state x="651" y="181" key="CommitChangelistDialog2/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595067141480" />
+    <state x="651" y="181" key="CommitChangelistDialog2/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595161697052" />
     <state x="100" y="123" width="1848" height="929" key="DiffContextDialog" timestamp="1588851486606">
       <screen x="0" y="23" width="2048" height="1129" />
     </state>
@@ -163,11 +180,15 @@
       <screen x="0" y="23" width="2048" height="1129" />
     </state>
     <state x="512" y="169" key="SettingsEditor/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588852292040" />
-    <state x="702" y="366" key="Vcs.Push.Dialog.v2" timestamp="1595067143459">
+    <state x="702" y="366" key="Vcs.Push.Dialog.v2" timestamp="1595161699694">
       <screen x="0" y="23" width="2304" height="1273" />
     </state>
     <state x="624" y="327" key="Vcs.Push.Dialog.v2/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588857032933" />
-    <state x="702" y="366" key="Vcs.Push.Dialog.v2/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595067143459" />
+    <state x="702" y="366" key="Vcs.Push.Dialog.v2/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595161699694" />
+    <state x="770" y="277" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1595578158222">
+      <screen x="0" y="23" width="2304" height="1273" />
+    </state>
+    <state x="770" y="277" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595578158222" />
     <state x="775" y="308" width="754" height="763" key="search.everywhere.popup" timestamp="1595044186504">
       <screen x="0" y="23" width="2304" height="1273" />
     </state>

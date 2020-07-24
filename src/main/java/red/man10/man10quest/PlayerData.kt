@@ -67,6 +67,18 @@ class PlayerData(private val plugin:Man10Quest) {
             }
         }
 
+        for (type in Man10Quest.quest.questType.keys()){
+            if (map[type] ==null){
+                val data = Man10Quest.quest.questType[type]!!
+
+                executeQueue("INSERT INTO player_quest_data (player, uuid, quest_name, status) " +
+                        "VALUES ('${p.name}', '${p.uniqueId}', '${type}', '${if (data.lock) "lock" else "unlock"}');")
+
+                map[type] = if (data.lock) LOCK else UNLOCK
+            }
+
+        }
+
         playerData[p] = map
 
         return
@@ -76,23 +88,55 @@ class PlayerData(private val plugin:Man10Quest) {
 
         playerQuest[p] = null
         setStatus(p,name,CLEAR)
+        val data = Man10Quest.quest.questMap[name]!!
+        p.sendMessage(data.finishMessage)
     }
 
     fun interruption(p: Player){
-
+        playerQuest[p] = null
     }
 
-    fun start(p:Player,quest: String){
+    fun start(p:Player, name: String){
 
-        playerQuest[p] = quest
+        playerQuest[p] = name
+
+        val data = Man10Quest.quest.questMap[name]!!
+        p.sendMessage(data.description)
     }
 
 
-    fun isPlay(player: Player): Boolean {
-        if(playerQuest[player] == null){
+    fun isPlay(p: Player): Boolean {
+        if(playerQuest[p] == null){
             return false
         }
         return true
+    }
+
+    fun getPlayingQuest(p:Player): String? {
+        return playerQuest[p]
+    }
+
+    fun getUnlockQuests(p:Player,isType:Boolean):MutableList<String>{
+        val list = mutableListOf<String>()
+
+        if (isType){
+
+            for (type in Man10Quest.quest.questType.keys()){
+                if (playerData[p]!![type] == UNLOCK){
+                    list.add(type)
+                }
+            }
+
+            return list
+
+        }
+        for (quest in Man10Quest.quest.questMap.keys()){
+            if (playerData[p]!![quest] == UNLOCK){
+                list.add(quest)
+            }
+        }
+
+        return list
     }
 
 }

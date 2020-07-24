@@ -24,10 +24,19 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
 
             if (sender !is Player)return false
 
-            inv.openMainMenu(sender)
+            if (!sender.hasPermission("man10quest.user"))return true
+
+            if (playerData.isPlay(sender)){
+                inv.openPlayingQuest(sender)
+                return true
+            }
+
+            inv.openMainMenu(sender,0)
 
             return true
         }
+
+        if (!sender.hasPermission("man10quest.op"))return true
 
         when(args[0]){
 
@@ -142,9 +151,22 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
             }
 
             "finish" ->{//mq finish <quest> <player>
+                if (args.size != 3)return true
 
                 playerData.finish(Bukkit.getPlayer(args[2])!!,args[1])
 
+            }
+
+            "interruption" ->{//mq interruption <player>
+                if (args.size != 2)return true
+
+                playerData.interruption(Bukkit.getPlayer(args[1])!!)
+            }
+
+            "start" ->{
+                if (args.size != 3)return true
+
+                playerData.start(Bukkit.getPlayer(args[2])!!,args[1])
             }
 
         }

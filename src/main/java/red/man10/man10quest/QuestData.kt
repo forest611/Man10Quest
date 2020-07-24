@@ -51,7 +51,6 @@ class QuestData(private val plugin :Man10Quest) {
             type.material = Material.valueOf(config.getString("setting.material","STONE")!!)
             type.customModelData = config.getInt("setting.customModelData",0)
             type.recRank = config.getString("setting.rank","§e§lGuest")!!
-            type.number = config.getInt("setting.number",-1)
             type.lock = config.getBoolean("setting.lock",false)
             type.file = f.name
 
