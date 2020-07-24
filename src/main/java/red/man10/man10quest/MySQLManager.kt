@@ -43,12 +43,12 @@ class MySQLManager(private val plugin: JavaPlugin, private val conName: String) 
     /////////////////////////////////
     fun loadConfig() {
         //   plugin.getLogger().info("MYSQL Config loading");
-        val config = plugin.config
-        HOST = config.getString("MySQL.Host")
-        USER = config.getString("MySQL.User")
-        PASS = config.getString("MySQL.Password")
-        PORT = config.getString("MySQL.Port")
-        DB = config.getString("MySQL.Database")
+        plugin.reloadConfig()
+        HOST = plugin.config.getString("mysql.host")
+        USER = plugin.config.getString("mysql.user")
+        PASS = plugin.config.getString("mysql.pass")
+        PORT = plugin.config.getString("mysql.port")
+        DB = plugin.config.getString("mysql.db")
         plugin.logger.info("Config loaded  $HOST / $USER")
 
     }

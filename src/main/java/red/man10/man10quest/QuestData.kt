@@ -34,7 +34,7 @@ class QuestData(private val plugin :Man10Quest) {
         val files = folder.listFiles()?.toMutableList()?:return
 
         for (f in files){
-            if (f.isFile){
+            if (!f.isFile|| !f.path.endsWith(".yml") || f.name == "config.yml"){
                 continue
             }
 
@@ -58,7 +58,11 @@ class QuestData(private val plugin :Man10Quest) {
             lore.add("§a§l推奨ランク:${type.recRank}§a§l以上")
             type.lore = lore
 
+            Bukkit.getLogger().info("Loaded quest type ${type.name}")
+
             for (name in names){
+
+                if (name == "setting")continue
 
                 val quest = Quest()
 
@@ -75,8 +79,13 @@ class QuestData(private val plugin :Man10Quest) {
                 quest.once = config.getBoolean("$name.once",true)
                 quest.lock = config.getBoolean("$name.lock",false)
 
-                quest.prize = plugin.itemStackArrayFromBase64(config.getString("$name.prize")!!)
-                quest.delivery = plugin.itemStackArrayFromBase64(config.getString("$name.delivery")!!)
+                if (config.getString("$name.prize")!=null){
+                    quest.prize = plugin.itemStackArrayFromBase64(config.getString("$name.prize")!!)
+                }
+
+                if (config.getString("$name.delivery")!=null){
+                    quest.delivery = plugin.itemStackArrayFromBase64(config.getString("$name.delivery")!!)
+                }
 
                 val lore2 = config.getStringList("lore")
 
@@ -85,6 +94,9 @@ class QuestData(private val plugin :Man10Quest) {
 
                 quests.add(quest.name)
                 questMap[quest.name] = quest
+
+                Bukkit.getLogger().info("Loaded quest ${quest.name}")
+
             }
 
             type.quests = quests

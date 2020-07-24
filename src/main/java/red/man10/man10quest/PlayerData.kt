@@ -39,11 +39,11 @@ class PlayerData(private val plugin:Man10Quest) {
 
         val mysql = MySQLManager(plugin,"quest")
 
-        val rs = mysql.query("SELECT status,quest FROM player_quest_data WHERE uuid='${p.uniqueId}';")!!
+        val rs = mysql.query("SELECT status,quest_name FROM player_quest_data WHERE uuid='${p.uniqueId}';")!!
 
        while (rs.next()){
 
-            val quest = rs.getString("quest")
+            val quest = rs.getString("quest_name")
 
             map[quest] = when(rs.getString("status")){
                 "lock" -> LOCK

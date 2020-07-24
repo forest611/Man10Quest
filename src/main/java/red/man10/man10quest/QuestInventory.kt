@@ -105,7 +105,7 @@ class QuestInventory(private val plugin:Man10Quest) {
 
         for (i in page*3 until  (page*3)+3){
 
-            if (i > quests.size)break
+            if (i >= quests.size)break
 
             val data = quest.questType[quests[i]]?:continue
 

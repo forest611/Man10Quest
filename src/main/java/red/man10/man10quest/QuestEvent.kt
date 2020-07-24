@@ -1,11 +1,14 @@
 package red.man10.man10quest
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.persistence.PersistentDataType
 
 
@@ -64,6 +67,15 @@ class QuestEvent(private val plugin:Man10Quest) : Listener {
             e.player.sendMessage("納品アイテムを設定しました")
 
             return
+        }
+
+    }
+
+    @EventHandler
+    fun login(e:PlayerJoinEvent){
+
+        GlobalScope.launch {
+            Man10Quest.playerData.load(e.player)
         }
 
     }

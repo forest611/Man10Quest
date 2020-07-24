@@ -37,6 +37,8 @@ class Man10Quest : JavaPlugin() {
         playerData = PlayerData(this)
         inv = QuestInventory(this)
 
+        quest.loadQuest()
+
     }
 
     override fun onDisable() {

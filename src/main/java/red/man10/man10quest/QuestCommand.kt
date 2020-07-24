@@ -147,6 +147,7 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
 
                     sender.sendMessage("§a§lリロード完了！")
                 }
+                return true
 
             }
 
