@@ -66,7 +66,7 @@ class QuestInventory(private val plugin:Man10Quest) {
 
         val inv = Bukkit.createInventory(null,27,"§e§lクエストタイプを選ぶ")
 
-        val quests = playerData.getUnlockQuests(p,true)
+        val quests = playerData.getUnlockQuestTypes(p)
 
         if (quests.size > (page+1)*3){
 
@@ -107,7 +107,7 @@ class QuestInventory(private val plugin:Man10Quest) {
 
             if (i > quests.size)break
 
-            val data = quest.questType[quests[i]]?:break
+            val data = quest.questType[quests[i]]?:continue
 
             val item = ItemStack(data.material)
             val meta = item.itemMeta

@@ -116,27 +116,17 @@ class PlayerData(private val plugin:Man10Quest) {
         return playerQuest[p]
     }
 
-    fun getUnlockQuests(p:Player,isType:Boolean):MutableList<String>{
+    fun getUnlockQuestTypes(p:Player):MutableList<String>{
         val list = mutableListOf<String>()
 
-        if (isType){
-
-            for (type in Man10Quest.quest.questType.keys()){
-                if (playerData[p]!![type] == UNLOCK){
-                    list.add(type)
-                }
-            }
-
-            return list
-
-        }
-        for (quest in Man10Quest.quest.questMap.keys()){
-            if (playerData[p]!![quest] == UNLOCK){
-                list.add(quest)
+        for (type in Man10Quest.quest.questType.keys()){
+            if (playerData[p]!![type] == UNLOCK){
+                list.add(type)
             }
         }
 
         return list
+
     }
 
 }
