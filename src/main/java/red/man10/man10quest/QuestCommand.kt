@@ -40,6 +40,19 @@ class QuestCommand(private val plugin:Man10Quest) : CommandExecutor{
 
         when(args[0]){
 
+            "help" ->{
+                sender.sendMessage("§e§l- /mq prize set/show <quest> :　クエストの報酬を設定、確認する")
+                sender.sendMessage("§e§l- /mq prize give <quest> <player> :　クエストの報酬を指定ユーザーに与える")
+                sender.sendMessage("§e§l- /mq delivery set/show <quest> :　クエスト納品アイテムを設定、確認する")
+                sender.sendMessage("§e§l- /mq delivery check <quest> <player> true/false :　納品アイテムを持っているか確認する(最後の値をtrueにすると、アイテムを回収する)")
+                sender.sendMessage("§e§l- /mq status set <quest> <lock/unlock/clear> <player> クエストのクリア状況を設定する")
+                sender.sendMessage("§e§l- /mq start <quest> <player> 指定クエストを開始する")
+                sender.sendMessage("§e§l- /mq finish <quest> <player> 指定クエストをクリアにする")
+                sender.sendMessage("§e§l- /mq interruption <player> クエストを中断する")
+                sender.sendMessage("§e§l- /mq on/off プラグインのon off")
+                sender.sendMessage("§e§l- /mq reload プラグインのリロード")
+            }
+
             "prize" ->{
 
                 if (args.size < 3){

@@ -5,13 +5,13 @@
       <artifact name="Man10Quest-1.0" />
     </artifacts-to-build>
   </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="5b6d0a24-8dd8-4f45-9090-bcdb361f00d2" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/PlayerData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/PlayerData.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestCommand.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestCommand.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestData.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestEvent.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestEvent.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,6 +71,7 @@
       <method v="2" />
     </configuration>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -159,7 +160,14 @@
       <option name="project" value="LOCAL" />
       <updated>1595597041650</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="納品処理修正">
+      <created>1595597928604</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1595597928604</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -175,7 +183,8 @@
     <MESSAGE value="DB処理修正&#10;コマンド追加" />
     <MESSAGE value="インベントリ処理修正" />
     <MESSAGE value="コンフィグのバグ修正&#10;一部読み込み処理修正&#10;インベントリ処理修正&#10;起動時にコンフィグを読み込むように" />
-    <option name="LAST_COMMIT_MESSAGE" value="コンフィグのバグ修正&#10;一部読み込み処理修正&#10;インベントリ処理修正&#10;起動時にコンフィグを読み込むように" />
+    <MESSAGE value="納品処理修正" />
+    <option name="LAST_COMMIT_MESSAGE" value="納品処理修正" />
   </component>
   <component name="WindowStateProjectService">
     <state x="512" y="169" key="#Project_Structure" timestamp="1588690860761">
@@ -198,57 +207,57 @@
       <screen x="0" y="23" width="2048" height="1129" />
     </state>
     <state x="762" y="341" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588691866112" />
-    <state x="651" y="181" key="CommitChangelistDialog2" timestamp="1595597041528">
+    <state x="651" y="181" key="CommitChangelistDialog2" timestamp="1595597928503">
       <screen x="0" y="23" width="2304" height="1273" />
     </state>
     <state x="579" y="163" key="CommitChangelistDialog2/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588857016754" />
-    <state x="651" y="181" key="CommitChangelistDialog2/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595597041528" />
+    <state x="651" y="181" key="CommitChangelistDialog2/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595597928503" />
     <state x="100" y="123" width="1848" height="929" key="DiffContextDialog" timestamp="1588851486606">
       <screen x="0" y="23" width="2048" height="1129" />
     </state>
     <state x="100" y="123" width="1848" height="929" key="DiffContextDialog/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588851486606" />
-    <state width="2262" height="444" key="GridCell.Tab.0.bottom" timestamp="1595597785508">
+    <state width="2262" height="444" key="GridCell.Tab.0.bottom" timestamp="1595598157376">
       <screen x="0" y="23" width="2304" height="1273" />
     </state>
-    <state width="2262" height="444" key="GridCell.Tab.0.bottom/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595597785508" />
-    <state width="2262" height="444" key="GridCell.Tab.0.center" timestamp="1595597785507">
+    <state width="2262" height="444" key="GridCell.Tab.0.bottom/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595598157376" />
+    <state width="2262" height="444" key="GridCell.Tab.0.center" timestamp="1595598157376">
       <screen x="0" y="23" width="2304" height="1273" />
     </state>
-    <state width="2262" height="444" key="GridCell.Tab.0.center/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595597785507" />
-    <state width="2262" height="444" key="GridCell.Tab.0.left" timestamp="1595597785507">
+    <state width="2262" height="444" key="GridCell.Tab.0.center/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595598157376" />
+    <state width="2262" height="444" key="GridCell.Tab.0.left" timestamp="1595598157375">
       <screen x="0" y="23" width="2304" height="1273" />
     </state>
-    <state width="2262" height="444" key="GridCell.Tab.0.left/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595597785507" />
-    <state width="2262" height="444" key="GridCell.Tab.0.right" timestamp="1595597785508">
+    <state width="2262" height="444" key="GridCell.Tab.0.left/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595598157375" />
+    <state width="2262" height="444" key="GridCell.Tab.0.right" timestamp="1595598157376">
       <screen x="0" y="23" width="2304" height="1273" />
     </state>
-    <state width="2262" height="444" key="GridCell.Tab.0.right/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595597785508" />
-    <state width="2262" height="444" key="GridCell.Tab.1.bottom" timestamp="1595597785420">
+    <state width="2262" height="444" key="GridCell.Tab.0.right/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595598157376" />
+    <state width="2262" height="444" key="GridCell.Tab.1.bottom" timestamp="1595598157377">
       <screen x="0" y="23" width="2304" height="1273" />
     </state>
-    <state width="2262" height="444" key="GridCell.Tab.1.bottom/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595597785420" />
-    <state width="2262" height="444" key="GridCell.Tab.1.center" timestamp="1595597785420">
+    <state width="2262" height="444" key="GridCell.Tab.1.bottom/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595598157377" />
+    <state width="2262" height="444" key="GridCell.Tab.1.center" timestamp="1595598157377">
       <screen x="0" y="23" width="2304" height="1273" />
     </state>
-    <state width="2262" height="444" key="GridCell.Tab.1.center/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595597785420" />
-    <state width="2262" height="444" key="GridCell.Tab.1.left" timestamp="1595597785419">
+    <state width="2262" height="444" key="GridCell.Tab.1.center/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595598157377" />
+    <state width="2262" height="444" key="GridCell.Tab.1.left" timestamp="1595598157377">
       <screen x="0" y="23" width="2304" height="1273" />
     </state>
-    <state width="2262" height="444" key="GridCell.Tab.1.left/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595597785419" />
-    <state width="2262" height="444" key="GridCell.Tab.1.right" timestamp="1595597785420">
+    <state width="2262" height="444" key="GridCell.Tab.1.left/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595598157377" />
+    <state width="2262" height="444" key="GridCell.Tab.1.right" timestamp="1595598157377">
       <screen x="0" y="23" width="2304" height="1273" />
     </state>
-    <state width="2262" height="444" key="GridCell.Tab.1.right/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595597785420" />
+    <state width="2262" height="444" key="GridCell.Tab.1.right/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595598157377" />
     <state x="576" y="188" key="SettingsEditor" timestamp="1595595570384">
       <screen x="0" y="23" width="2304" height="1273" />
     </state>
     <state x="512" y="169" key="SettingsEditor/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588852292040" />
     <state x="576" y="188" key="SettingsEditor/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595595570384" />
-    <state x="702" y="366" key="Vcs.Push.Dialog.v2" timestamp="1595597044184">
+    <state x="702" y="366" key="Vcs.Push.Dialog.v2" timestamp="1595597992604">
       <screen x="0" y="23" width="2304" height="1273" />
     </state>
     <state x="624" y="327" key="Vcs.Push.Dialog.v2/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588857032933" />
-    <state x="702" y="366" key="Vcs.Push.Dialog.v2/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595597044184" />
+    <state x="702" y="366" key="Vcs.Push.Dialog.v2/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595597992604" />
     <state x="770" y="277" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1595578158222">
       <screen x="0" y="23" width="2304" height="1273" />
     </state>
@@ -258,31 +267,5 @@
     </state>
     <state x="689" y="276" width="670" height="676" key="search.everywhere.popup/2048.95.1920.1057/0.23.2048.1129@0.23.2048.1129" timestamp="1588854842641" />
     <state x="775" y="308" width="754" height="763" key="search.everywhere.popup/2304.95.1920.1057/0.23.2304.1273@0.23.2304.1273" timestamp="1595044186504" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestData.kt</url>
-          <line>176</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestData.kt</url>
-          <line>178</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestData.kt</url>
-          <line>204</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/src/main/java/red/man10/man10quest/QuestData.kt</url>
-          <line>199</line>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
