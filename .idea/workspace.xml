@@ -9,7 +9,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5b6d0a24-8dd8-4f45-9090-bcdb361f00d2" name="Default Changelist" comment="" />
+    <list default="true" id="5b6d0a24-8dd8-4f45-9090-bcdb361f00d2" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/Man10Quest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/red/man10/man10quest/Man10Quest.kt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -171,7 +173,14 @@
       <option name="project" value="LOCAL" />
       <updated>1598157884997</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="test commit">
+      <created>1599294603486</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1599294603486</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -189,7 +198,8 @@
     <MESSAGE value="コンフィグのバグ修正&#10;一部読み込み処理修正&#10;インベントリ処理修正&#10;起動時にコンフィグを読み込むように" />
     <MESSAGE value="納品処理修正" />
     <MESSAGE value="コマンドのhelp追加" />
-    <option name="LAST_COMMIT_MESSAGE" value="コマンドのhelp追加" />
+    <MESSAGE value="test commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="test commit" />
   </component>
   <component name="WindowStateProjectService">
     <state x="616" y="321" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1595596479123">

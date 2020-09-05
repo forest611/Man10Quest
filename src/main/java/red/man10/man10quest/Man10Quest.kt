@@ -25,7 +25,6 @@ class Man10Quest : JavaPlugin() {
     override fun onEnable() {
         // Plugin startup logic
         saveDefaultConfig()
-
         saveConfig()
 
         getCommand("mq")!!.setExecutor(QuestCommand(this))
